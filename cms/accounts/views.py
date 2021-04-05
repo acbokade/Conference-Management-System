@@ -61,13 +61,60 @@ def login_process(request):
         if not password_validation:
             return render(request, "login.html", {"is_logged_in": False, "user_message": "Incorrect password"})
 
-        response = render(request, "index.html", {"is_logged_in": True})
+        response = render(request, "userpage.html", {"is_logged_in": True})
         utils.create_user_cookies(response, email, hashed_password)
         return response
 
 
-def logout(request):
-    response = render(request, "index.html", {"is_logged_in": False})
+def delete_cookies(response):
     response.delete_cookie('email')
     response.delete_cookie('password')
+
+
+def logout(request):
+    response = render(request, "index.html", {"is_logged_in": False})
+    delete_cookies(response)
     return response
+
+
+def profile(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        return render(request, "user_profile.html", {"is_logged_in": is_logged_in, "user_message": ""})
+    return render(request, "index.html", {"is_logged_in": False})
+
+
+def change_password(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        return render(request, "change_password.html", {"is_logged_in": is_logged_in, "user_message": ""})
+    return render(request, "index.html", {"is_logged_in": False})
+
+
+def change_password_process(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        user = models.User.objects.get(email=request.COOKIES.get('email'))
+
+        oldpassword = request.POST['old_password']
+        newpassword = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
+
+        hashed_old_password = hashlib.sha224(oldpassword.encode('utf-8')).hexdigest()
+        old_password_validation = utils.check_password_validity(user.email, hashed_old_password)
+        if not old_password_validation:
+            return render(request, "change_password.html", {"is_logged_in": is_logged_in,
+                                                "user_message": "incorrect old password"})
+        else:
+            if newpassword == confirm_password:
+                context = {"is_logged_in": False, "user_message": "Password Successfully Changed"}
+                response = render(request, "login.html", context)
+                delete_cookies(response)
+                user.password = hashlib.sha224(newpassword.encode('utf-8')).hexdigest()
+                user.save()
+                return response
+            else:
+                return render(request, "change_password.html", {"is_logged_in": is_logged_in,
+                                    "user_message": "new password and confirm password do not match"})
+
+    return render(request, "index.html", {"is_logged_in": False})
