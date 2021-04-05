@@ -7,6 +7,7 @@ from . import models
 import hashlib
 from threading import Lock
 from threading import Thread
+from . import data_access_layer
 
 
 email_lock = Lock()
@@ -29,7 +30,7 @@ def singup_process(request):
     if request.method == "POST":
         email = request.POST.get('email')
         try:
-            check_user = models.User.objects.get(email=email)
+            check_user = data_access_layer.obtain_user_by_email(email)
         except Exception:
             name = request.POST.get('name')
             password = request.POST.get('password').encode('utf-8')
@@ -41,11 +42,11 @@ def singup_process(request):
             response = render(request, "login.html", context)
             # utils.create_user_cookies(response, email, user.password)
 
-            email_send_thread = Thread(target=utils.send_email,
-                                       args=("About your registration to conference management system",
-                                             "You have been registered successfully",
-                                             email, email_lock))
-            email_send_thread.start()
+            # email_send_thread = Thread(target=utils.send_email,
+            #                            args=("About your registration to conference management system",
+            #                                  "You have been registered successfully",
+            #                                  email, email_lock))
+            # email_send_thread.start()
 
             return response
 
@@ -106,7 +107,7 @@ def change_password(request):
 def change_password_process(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
-        user = models.User.objects.get(email=request.COOKIES.get('email'))
+        user = data_access_layer.obtain_user_by_email(request.COOKIES.get('email'))
 
         oldpassword = request.POST['old_password']
         newpassword = request.POST['new_password']
