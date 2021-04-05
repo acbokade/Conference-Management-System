@@ -5,6 +5,11 @@ from django.views import generic
 from . import utils
 from . import models
 import hashlib
+from threading import Lock
+from threading import Thread
+
+
+email_lock = Lock()
 
 
 def index(request):
@@ -35,6 +40,13 @@ def singup_process(request):
             context = {"is_logged_in": False, "user_message": "Account Successfully Created"}
             response = render(request, "login.html", context)
             # utils.create_user_cookies(response, email, user.password)
+
+            email_send_thread = Thread(target=utils.send_email,
+                                       args=("About your registration to conference management system",
+                                             "You have been registered successfully",
+                                             email, email_lock))
+            email_send_thread.start()
+
             return response
 
         return render(request, "login.html", {"is_logged_in": False, "user_message": "Email already exists"})
@@ -117,4 +129,18 @@ def change_password_process(request):
                 return render(request, "change_password.html", {"is_logged_in": is_logged_in,
                                     "user_message": "new password and confirm password do not match"})
 
+    return render(request, "index.html", {"is_logged_in": False})
+
+
+def complete_research_profile(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        return render(request, "complete_research_profile.html", {"is_logged_in": is_logged_in, "user_message": ""})
+    return render(request, "index.html", {"is_logged_in": False})
+
+
+def complete_research_profile_process(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        pass
     return render(request, "index.html", {"is_logged_in": False})

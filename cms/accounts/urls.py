@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -12,4 +12,7 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('change_password', views.change_password, name='change_password'),
     path('change_password_process', views.change_password_process, name='change_password_process'),
+    path('complete_research_profile', views.complete_research_profile, name='complete_research_profile'),
+    path('complete_research_profile_process', views.complete_research_profile_process,
+         name='complete_research_profile_process'),
 ]

@@ -1,6 +1,10 @@
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from threading import Thread
 import datetime
 from . import models
+from . import constants
 
 
 def check_login(request):
@@ -31,3 +35,32 @@ def check_password_validity(email, hashed_password):
         return True
     return False
 
+
+def send_email(subject, message, to, email_lock):
+    msg = MIMEMultipart()
+    msg['Subject'] = subject
+    msg['From'] = constants.CMS_EMAIL
+    msg['To'] = to
+
+    # The main body is just another attachment
+    body = MIMEText(message)
+    msg.attach(body)
+    # print("message created")
+    # print(message)
+    # print("attachments attached")
+
+    email_lock.acquire()
+    try:
+        s = smtplib.SMTP('smtp-mail.outlook.com', 587)
+        print("connected to smtp")
+        s.starttls()
+        s.login(constants.CMS_EMAIL, constants.CMS_PASSWORD)
+        print("logged in to smtp")
+        s.sendmail(constants.CMS_EMAIL, to, msg.as_string())
+        print("e mail sent")
+        s.quit()
+        email_lock.release()
+    except Exception as e:
+        print(e)
+        email_lock.release()
+    print("connection exited")
