@@ -8,5 +8,5 @@ urlpatterns = [
     path('singup_process', views.singup_process, name='singup_process'),
     path('login', views.login, name='login'),
     path('login_process', views.login_process, name='login_process'),
+    path('logout', views.logout, name='logout'),
 ]
-

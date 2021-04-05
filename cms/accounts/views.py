@@ -14,7 +14,10 @@ def index(request):
 
 def signup(request):
     is_logged_in = utils.check_login(request)
-    return render(request, "signup.html", {"is_logged_in": is_logged_in})
+    if is_logged_in:
+        logout(request)
+    else:
+        return render(request, "signup.html", {"is_logged_in": is_logged_in})
 
 
 def singup_process(request):
@@ -34,13 +37,15 @@ def singup_process(request):
             # utils.create_user_cookies(response, email, user.password)
             return response
 
-        if check_user:
-            return render(request, "login.html", {"is_logged_in": False, "user_message": "Email already exists"})
+        return render(request, "login.html", {"is_logged_in": False, "user_message": "Email already exists"})
 
 
 def login(request):
     is_logged_in = utils.check_login(request)
-    return render(request, "login.html", {"is_logged_in": is_logged_in, "user_message": ""})
+    if is_logged_in:
+        logout(request)
+    else:
+        return render(request, "login.html", {"is_logged_in": is_logged_in, "user_message": ""})
 
 
 def login_process(request):
@@ -52,10 +57,17 @@ def login_process(request):
 
         password = request.POST.get('password').encode('utf-8')
         hashed_password = hashlib.sha224(password).hexdigest()
-        password_validation = utils.check_password_validity(hashed_password)
+        password_validation = utils.check_password_validity(email, hashed_password)
         if not password_validation:
             return render(request, "login.html", {"is_logged_in": False, "user_message": "Incorrect password"})
 
-        response = render(request, "index.html", {"is_logged_in": False})
+        response = render(request, "index.html", {"is_logged_in": True})
         utils.create_user_cookies(response, email, hashed_password)
         return response
+
+
+def logout(request):
+    response = render(request, "index.html", {"is_logged_in": False})
+    response.delete_cookie('email')
+    response.delete_cookie('password')
+    return response
