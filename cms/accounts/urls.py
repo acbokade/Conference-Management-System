@@ -1,8 +1,12 @@
 from django.urls import path
-from .views import SignUpView
+from . import views
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('signup/', SignUpView.as_view(), name='signup'),
-
+    path('', views.index, name='index'),
+    path('singup', views.singup, name='singup'),
+    path('singup_process', views.singup_process, name='singup_process'),
+    path('login', views.login, name='login'),
+    path('login_process', views.login_process, name='login_process'),
 ]
 
