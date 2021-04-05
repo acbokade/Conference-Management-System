@@ -1,0 +1,25 @@
+{%extends "base.html" %}
+{% block head %}
+{% load static from staticfiles %}
+<link rel="stylesheet" href="{% static '/css/style_signup_login_form.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{{ user_message }}
+
+<div class="divFormContainer">
+    <div class="divLoginSignup">
+        <form action="login_process" method="post">
+            {% csrf_token %}
+            <input type="text" placeholder="e-mail" name="email">
+            <br>
+            <input type="password" placeholder="password" name="password">
+            <br>
+
+            <input type="submit" value="Log In">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

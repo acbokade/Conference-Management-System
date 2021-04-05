@@ -1,0 +1,30 @@
+{%extends "base.html" %}
+{% block head %}
+{% load static from staticfiles %}
+<link rel="stylesheet" href="{% static '/css/style_signup_login_form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="divFormContainer">
+  <div class="divLoginSignup">
+    <form action="signup_process" method="post">
+      {% csrf_token %}
+      <input type="text" placeholder="Email" name="email">
+      <br>
+      <input type="password" placeholder="Password" name="password">
+      <br>
+      <input type="text" placeholder="Full Name" name="name">
+      <br>
+<!--      <input type="radio" name="user_type" value="chair">Chair-->
+<!--      <br>-->
+<!--      <input type="radio" name="user_type" value="reviewer">Reviewer-->
+<!--      <br>-->
+<!--      <input type="radio" name="user_type" value="author">Author-->
+<!--      <br>-->
+      <input type="submit" value="Okay">
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
