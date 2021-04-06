@@ -3,10 +3,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <h1 class="mt-2">Create conference</h1>
+  <h1 class="mt-2">Update conference</h1>
   <form method="post">
     {% csrf_token %}
     {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Create conference</button>
+    <button type="submit" class="btn btn-success">Update conference</button>
   </form>
 {% endblock %}

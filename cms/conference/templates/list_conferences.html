@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mt-2">Conferences list</h1>
+<table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Location</th>
+        <th scope="col">External URL</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        {% for conf in confs %}
+            {% if conf.is_valid %}   
+                <tr>
+                    <td><a href="#">{{ conf.name }}</td>
+                    <td>{{ conf.start_date }}</td>
+                    <td>{{ conf.end_date }}</td>
+                    <td>{{ conf.location }}</td>
+                    <td><a href="#">{{ conf.url }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+  
+{% endblock %}

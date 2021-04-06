@@ -1,9 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from accounts import utils
 from datetime import datetime
 from . import models
 from accounts import models as accounts_models
 from .forms import ConferenceForm
+
+
+def list_conferences(request):
+    is_logged_in = utils.check_login(request)
+    confs = models.Conference.objects.all()
+    return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs})
+
 
 def create_conference(request):
     is_logged_in = utils.check_login(request)
@@ -11,39 +18,50 @@ def create_conference(request):
         form = ConferenceForm()
         return render(request, "create_conference.html", {"is_logged_in": is_logged_in, "form": form})
     if request.method == "POST":
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        short_name = request.POST.get('short_name')
-        
-        email = request.COOKIES.get('email')
-        created_by = accounts_models.User.objects.get(email=request.COOKIES.get('email'))
-
-        # TODO: handle errors
-        ca1 = accounts_models.User.objects.get(email=request.POST.get('ca1_email'))
-        ca2 = accounts_models.User.objects.get(email=request.POST.get('ca2_email'))
-        ca3 = accounts_models.User.objects.get(email=request.POST.get('ca3_email'))
-
-        start_date = datetime.strptime(request.POST.get('start_date'), '%Y-%m-%dT%H:%M')
-        end_date = datetime.strptime(request.POST.get('end_date'), '%Y-%m-%dT%H:%M')
-        logo = None
-        url = None
-        subject_areas = request.POST.get('subject_areas')
-        expected_submissions = request.POST.get('expected_submissions')
-        conference = models.Conference(name=name, short_name=short_name,
-                                       ca=ca, start_date=start_date,
-                                       end_date=end_date, logo=logo,
-                                       url=url, subject_areas=subject_areas,
-                                       expected_submissions=expected_submissions)
-        conference.ca.add(ca1)
-        conference.ca.add(ca2)
-        conference.ca.add(ca3)
-        conference.save()
+        form = ConferenceForm(request.POST)
+        if form.is_valid():
+            conference = form.save(commit=False)
+            conference.save()
+            ca_emails = request.POST.get('ca_emails')
+            for ca_email in ca_emails:
+                try:
+                    other_ca = accounts_models.User.objects.get(email=ca_email)
+                    conference.ca.add(other_ca)
+                except accounts_models.User.DoesNotExist:
+                    # TODO: handle this event by sending email to creator indicating that the email doesnt exist
+                    pass
+            confs = models.Conference.objects.all()
+            return redirect(list_conferences)
+        else:
+            return render(request, "create_conference.html", {"form": form})
         # afterwards portal admin validates it and sets is_valid field accordingly
-        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in})
 
 
-def update_conference(request):
-    pass
+def update_conference(request, name):
+    is_logged_in = utils.check_login(request)
+    if request.method == "GET":
+        conf = models.Conference.objects.get(name=name)
+        form = ConferenceForm(instance=conf)
+        return render(request, "update_conference.html", {"is_logged_in": is_logged_in, "form": form})
+    if request.method == "POST":
+        form = ConferenceForm(request.POST)
+        if form.is_valid():
+            conference = form.save(commit=False)
+            conference.save()
+            ca_emails = request.POST.get('ca_emails')
+            for ca_email in ca_emails:
+                if ca_email in conference.ca_emails:
+                    continue
+                try:
+                    other_ca = accounts_models.User.objects.get(email=ca_email)
+                    conference.ca.add(other_ca)
+                except accounts_models.User.DoesNotExist:
+                    # TODO: handle this event by sending email to creator indicating that the email doesnt exist
+                    pass
+            confs = models.Conference.objects.all()
+            return redirect(list_conferences)
+        else:
+            return render(request, "update_conference.html", {"is_logged_in": is_logged_in, "form": form})
 
 
 def create_workshop(request):
