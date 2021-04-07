@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Conference
+from .models import Conference, Workshop
 
-# Register your models here.
 admin.site.register(Conference)
+admin.site.register(Workshop)
