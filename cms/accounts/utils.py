@@ -3,6 +3,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from threading import Thread
 import datetime
+import re
 from . import models
 from . import constants
 from . import data_access_layer
@@ -33,6 +34,12 @@ def check_email_validity(email):
 def check_password_validity(email, hashed_password):
     check_user = data_access_layer.obtain_user_by_email(email)
     if hashed_password == check_user.password:
+        return True
+    return False
+
+
+def check_email_regex(email):
+    if re.search(constants.VALID_EMAIL_REGEX, email):
         return True
     return False
 

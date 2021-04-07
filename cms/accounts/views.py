@@ -29,6 +29,11 @@ def signup(request):
 def singup_process(request):
     if request.method == "POST":
         email = request.POST.get('email')
+        valid_email_regex = utils.check_email_regex(email)
+        if not valid_email_regex:
+            return render(request, "signup.html", {"is_logged_in": False,
+                                                   "user_message": "invalid email address format"})
+
         try:
             check_user = data_access_layer.obtain_user_by_email(email)
         except Exception:
@@ -90,6 +95,13 @@ def logout(request):
     return response
 
 
+def userpage(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        return render(request, "userpage.html", {"is_logged_in": is_logged_in, "user_message": ""})
+    return render(request, "index.html", {"is_logged_in": False})
+
+
 def profile(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
@@ -136,12 +148,40 @@ def change_password_process(request):
 def complete_research_profile(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
-        return render(request, "complete_research_profile.html", {"is_logged_in": is_logged_in, "user_message": ""})
+        try:
+            user_research_profile = data_access_layer.obtain_research_profile(request.COOKIES.get('email'))
+            context = {"is_logged_in": is_logged_in, "institution": user_research_profile.institution,
+                   "research_interests": user_research_profile.research_interests,
+                   "highest_degree": user_research_profile.highest_degree,
+                   "google_scholar": user_research_profile.google_scholar}
+        except Exception as e:
+            context = {"is_logged_in": is_logged_in, "institution": "",
+                       "research_interests": "", "highest_degree": "", "google_scholar": ""}
+        return render(request, "complete_research_profile.html", context)
     return render(request, "index.html", {"is_logged_in": False})
 
 
 def complete_research_profile_process(request):
     is_logged_in = utils.check_login(request)
-    if is_logged_in:
-        pass
+    if is_logged_in and request.method == "POST":
+        institution = request.POST['institution']
+        research_interests = request.POST['research_interests']
+        highest_degree = request.POST['highest_degree']
+        google_scholar = request.POST['google_scholar']
+        person = data_access_layer.obtain_user_by_email(request.COOKIES.get('email'))
+
+        try:
+            user_research_profile = data_access_layer.obtain_research_profile(request.COOKIES.get('email'))
+            user_research_profile.institution = institution
+            user_research_profile.research_interests = research_interests
+            user_research_profile.highest_degree = highest_degree
+            user_research_profile.google_scholar = google_scholar
+            user_research_profile.save()
+        except Exception as e:
+            user_research_profile = models.ResearchProfile(person=person, institution=institution,
+                                    research_interests=research_interests, highest_degree=highest_degree,
+                                    google_scholar=google_scholar)
+            user_research_profile.save()
+        return render(request, "userpage.html", {"is_logged_in": True})
+
     return render(request, "index.html", {"is_logged_in": False})
