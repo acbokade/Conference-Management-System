@@ -3,8 +3,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from threading import Thread
 import datetime
+import re
 from . import models
 from . import constants
+from . import data_access_layer
 
 
 def check_login(request):
@@ -23,15 +25,21 @@ def create_user_cookies(response, email, hashed_password):
 
 def check_email_validity(email):
     try:
-        check_user = models.User.objects.get(email=email)
-    except Exception:
+        check_user = data_access_layer.obtain_user_by_email(email)
+    except Exception as e:
         return False
     return True
 
 
 def check_password_validity(email, hashed_password):
-    check_user = models.User.objects.get(email=email)
+    check_user = data_access_layer.obtain_user_by_email(email)
     if hashed_password == check_user.password:
+        return True
+    return False
+
+
+def check_email_regex(email):
+    if re.search(constants.VALID_EMAIL_REGEX, email):
         return True
     return False
 
