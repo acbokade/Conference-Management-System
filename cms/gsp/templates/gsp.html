@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <h1 class="mt-2">General Submission Page</h1>
+  <div class="card card-info">
+    <div class="card-header bg-primary mb-3"><h3>Paper</h3></div>
+    <div class="card-body">
+      {% if paper_submission_active %} 
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ paper_submission_form|crispy }}
+          <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+      {% else %}
+        <h3>Title:</h3>
+        {{ user_status.title }}
+        <br>
+        <h4>Abstract:</h4>
+        {{ user_status.abstract }}
+
+        Paper Submission Date Elapsed.
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card card-primary">
+    <div class="card-header bg-primary mb-3"><h3>Reviews</h3></div>
+    <div class="card-body">
+      {% if author_response_submission_active %}
+        <form method="post" enctype="multipart/form-data">
+          {{ author_response_submission_form|crispy }}
+          <button type="submit" class="btn btn-success">Create conference</button>
+        </form>
+      {% else %}
+        Your reviews. 
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card card-primary">
+    <div class="card-header bg-primary mb-3"><h3>Camera Ready & Poster</h3></div>
+    <div class="card-body">
+      {% if cam_pos_submission_active %}
+        <form method="post" enctype="multipart/form-data">
+          {{ cam_pos_submission_form|crispy }}
+          <button type="submit" class="btn btn-success">Create conference</button>
+        </form>
+      {% else %}
+        Your Cam-Pos Submission.
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
