@@ -22,12 +22,12 @@ class PaperSubmissionForm(forms.ModelForm):
     class Meta:
         model = PaperSubmission
         # fields = ['title']
-        exclude = ['submission_index']
+        # exclude = ['submission_index']
+        exclude = []
         # widgets = form_widgets
 
-    def clean(self):
-        cleaned_data = super(PaperSubmissionForm, self).clean()
-        cleaned_data = validate_paper_submission_form(cleaned_data)
+    # def clean(self):
+    #     return True
 
 class AuthorResponseSubmissionForm(forms.ModelForm):
 
@@ -36,8 +36,8 @@ class AuthorResponseSubmissionForm(forms.ModelForm):
         exclude = []
         # widgets = form_widgets
 
-    def clean(self):
-        pass
+    # def clean(self):
+    #     return True
 
 class CamPosSubmissionForm(forms.ModelForm):
 
@@ -46,5 +46,5 @@ class CamPosSubmissionForm(forms.ModelForm):
         exclude = []
         # widgets = form_widgets
 
-    def clean(self):
-        pass
+    # def clean(self):
+    #     return True
