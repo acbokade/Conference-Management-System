@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'conference',
     'crispy_forms',
     'reviewer',
+    'gsp',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -63,7 +64,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
                  os.path.join(BASE_DIR, 'conference/templates'),
-                 os.path.join(BASE_DIR, 'accounts/templates'), ],
+                 os.path.join(BASE_DIR, 'accounts/templates'),
+                 os.path.join(BASE_DIR, 'gsp/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

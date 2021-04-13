@@ -1,12 +1,14 @@
-from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views import generic
-from . import utils
-from . import models
 import hashlib
+
 from threading import Lock
 from threading import Thread
+from django.views import generic
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+
+from . import utils
+from . import models
 from . import data_access_layer
 
 
@@ -185,3 +187,6 @@ def complete_research_profile_process(request):
         return render(request, "userpage.html", {"is_logged_in": True})
 
     return render(request, "index.html", {"is_logged_in": False})
+
+def redirect_conference(request):
+    return redirect('/conference/list_conferences')

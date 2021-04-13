@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
+from . import views
 
 urlpatterns = [
+    path('', views.redirect_home),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('conference/', include('conference.urls')),
-    path('reviewer/', include('reviewer.urls'))
+    path('reviewer/', include('reviewer.urls')),
+    path('gsp/', include('gsp.urls'))
 ]
