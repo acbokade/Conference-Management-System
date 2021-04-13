@@ -68,7 +68,7 @@ class ConferenceForm(forms.ModelForm):
 
     class Meta:
         model = Conference
-        exclude = ['is_valid', 'ca']
+        exclude = ['is_valid', 'ca', 'created_by']
         widgets = form_widgets
 
     def clean(self):
@@ -84,7 +84,7 @@ class WorkshopForm(forms.ModelForm):
 
     class Meta:
         model = Workshop
-        exclude = ['is_valid', 'ca', 'parent_conference']
+        exclude = ['is_valid', 'ca', 'parent_conference', 'created_by']
         widgets = form_widgets
 
     def clean(self):

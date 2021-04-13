@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 from conference.models import Conference
 from django.core.validators import MinValueValidator
+from gsp.models import PaperSubmission
 
 
 class Reviewer(models.Model):
@@ -20,7 +21,14 @@ class Reviewer(models.Model):
 
 
 class Review(models.Model):
-    paper = models.ForeignKey(User, on_delete=models.CASCADE)
+    paper_submission = models.ForeignKey(
+        PaperSubmission, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(Reviewer, on_delete=models.CASCADE)
+    summary = models.TextField(blank=True)
+    novelty = models.TextField(blank=True)
+    impact = models.TextField(blank=True)
+    strong_points = models.TextField(blank=True)
+    weak_points = models.TextField(blank=True)
 
     def __str__(self):
-        return self.paper.name
+        return self.paper_submission.title
