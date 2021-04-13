@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'reviewer_base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <h1 class="mt-2">Apply as a reviewer</h1>
+  <h1 class="mt-2">Apply as a reviewer for {{ name }} conference</h1>
   <form method="post">
     {% csrf_token %}
     {{ form|crispy }}

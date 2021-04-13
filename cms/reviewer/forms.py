@@ -1,5 +1,5 @@
 from django import forms
-from .models import Reviewer
+from .models import Reviewer, Review
 
 
 class ReviewerForm(forms.ModelForm):
@@ -17,4 +17,4 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        exclude = []
+        exclude = ['paper_submission', 'reviewer']
