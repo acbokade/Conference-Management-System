@@ -57,7 +57,8 @@ form_widgets = {
     'review_submission_deadline': DateInput(),
     'cam_pos_submission_deadline': DateInput(),
     'ca_emails': forms.TextInput(attrs={'placeholder': 'Enter space separated emails of conference admins eg. a@gmail.com b@gmail.com,...'}),
-    'location': forms.TextInput(attrs={'placeholder': 'Enter city and country'})
+    'location': forms.TextInput(attrs={'placeholder': 'Enter city and country'}),
+    'subject_areas': forms.TextInput(attrs={'placeholder': 'Enter comma separated subject areas eg. Segmentation, Adversarial Networks, Recurrent Networks'})
 }
 
 
