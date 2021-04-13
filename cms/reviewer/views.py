@@ -57,10 +57,15 @@ def edit_review(request, conf_name, title):
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
-            return redirect('conference:list_conference')
-        else:
-            return render(request, "make_review.html", {"is_logged_in": is_logged_in, "form": form})
+            review = form.save(commit=False)
+            # TODO: prevent any user from editing review
+            review.reviewer = reviewer_dao.get_reviewer_by_email(
+                request.COOKIES.get('email'))
+            review.paper_submission = gsp_dao.get_paper_submission_by_title(
+                title)
+            review.save()
+            return redirect()
+        return render(request, "make_review.html", {"is_logged_in": is_logged_in, "form": form})
 
 
 def reviewer_assignment(request):

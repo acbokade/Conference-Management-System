@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import User
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 class ConferenceInfo(models.Model):
@@ -24,6 +26,30 @@ class ConferenceInfo(models.Model):
 
     class Meta:
         abstract = True
+
+    def clean(self):
+        current_datetime = timezone.now()
+
+        if current_datetime > self.start_date:
+
+            raise ValidationError(('Start date %(start_date)s must be set after current date time %(current_datetime)s'),
+                                  params={'start_date': self.start_date, 'current_datetime': current_datetime})
+
+        if self.start_date > self.paper_submission_deadline:
+            raise ValidationError(('Start date %(start_date)s must be before paper_submission_deadline %(paper_submission_deadline)s'),
+                                  params={'start_date': self.start_date, 'paper_submission_deadline': self.paper_submission_deadline})
+
+        if self.paper_submission_deadline > self.review_submission_deadline:
+            raise ValidationError(('Paper submission deadline %(paper_submission_deadline)s must be before review submission %(review_submission_deadline)s'),
+                                  params={'paper_submission_deadline': self.paper_submission_deadline, 'review_submission_deadline': self.review_submission_deadline})
+
+        if self.review_submission_deadline > self.cam_pos_submission_deadline:
+            raise ValidationError(('Review submission deadline %(review_submission_deadline)s must be before Cam Poster submission deadline %(cam_pos_submission_deadline)s'),
+                                  params={'review_submission_deadline': self.review_submission_deadline, 'cam_pos_submission_deadline': self.cam_pos_submission_deadline})
+
+        if self.cam_pos_submission_deadline > self.end_date:
+            raise ValidationError(('Cam Poster deadline %(cam_pos_submission_deadline)s must be before end date %(end_date)s'),
+                                  params={'cam_pos_submission_deadline': self.cam_pos_submission_deadline, 'end_date': self.end_date})
 
 
 class Conference(ConferenceInfo):
