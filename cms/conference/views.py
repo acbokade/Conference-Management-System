@@ -132,3 +132,7 @@ def update_workshop(request, name):
         else:
             return render(request, "update_workshop.html", {"is_logged_in": is_logged_in, "form": form})
 
+def conference_details(request, conf_name=None):
+
+    context_dict = conference_dao.get_conference_details(conf_name)
+    return render(request, "conf_details.html", context_dict)

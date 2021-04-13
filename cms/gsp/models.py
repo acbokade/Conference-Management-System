@@ -6,16 +6,14 @@ from conference.models import Conference, Workshop
 class ConferenceSubmission(models.Model):
 
     conference = models.ForeignKey(
-        Conference, on_delete=models.CASCADE
+        Conference, on_delete=models.CASCADE, null=True
     )
     title = models.CharField(primary_key=True, max_length=50)
     main_author = models.ForeignKey(
-        User, on_delete=models.CASCADE
+        User, on_delete=models.CASCADE, null=True
     )
     class Meta:
         abstract = True
-
-
 
 class PaperSubmission(ConferenceSubmission):
 
@@ -27,10 +25,10 @@ class PaperSubmission(ConferenceSubmission):
     def __str__(self):
         return self.title
 
-class AuthorResponseSubmission(ConferenceSubmission):
-    response_pdf = models.FileField(upload_to='tmp/cms-project/responses', blank=True, null=True)
+# class AuthorResponseSubmission(ConferenceSubmission):
+#     response_pdf = models.FileField(upload_to='tmp/cms-project/responses', blank=True, null=True)
 
-class CamPosSubmission(ConferenceSubmission):
-    camera_ready_pdf = models.FileField(upload_to='tmp/cms-project/camera', blank=False)
-    poster_pdf = models.FileField(upload_to='tmp/cms-project/posters', blank=False)
+# class CamPosSubmission(ConferenceSubmission):
+#     camera_ready_pdf = models.FileField(upload_to='tmp/cms-project/camera', blank=False)
+#     poster_pdf = models.FileField(upload_to='tmp/cms-project/posters', blank=False)
 

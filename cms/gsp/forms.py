@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ValidationError
-from .models import PaperSubmission, AuthorResponseSubmission, CamPosSubmission
+from .models import PaperSubmission #, AuthorResponseSubmission, CamPosSubmission
 from datetime import datetime
 from . import data_access_layer as conference_dao
 
@@ -29,22 +29,22 @@ class PaperSubmissionForm(forms.ModelForm):
     # def clean(self):
     #     return True
 
-class AuthorResponseSubmissionForm(forms.ModelForm):
+# class AuthorResponseSubmissionForm(forms.ModelForm):
 
-    class Meta:
-        model = AuthorResponseSubmission
-        exclude = ['conference', 'main_author']
-        # widgets = form_widgets
+#     class Meta:
+#         model = AuthorResponseSubmission
+#         exclude = ['conference', 'main_author']
+#         # widgets = form_widgets
 
-    # def clean(self):
-    #     return True
+#     # def clean(self):
+#     #     return True
 
-class CamPosSubmissionForm(forms.ModelForm):
+# class CamPosSubmissionForm(forms.ModelForm):
 
-    class Meta:
-        model = CamPosSubmission
-        exclude = ['conference', 'main_author']
-        # widgets = form_widgets
+#     class Meta:
+#         model = CamPosSubmission
+#         exclude = ['conference', 'main_author']
+#         # widgets = form_widgets
 
-    # def clean(self):
-    #     return True
+#     # def clean(self):
+#     #     return True

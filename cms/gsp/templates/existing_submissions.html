@@ -1,24 +1,44 @@
 {% extends 'gsp_base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
-<h1 class="mt-2">{{ conf.name }}</h1>
+<h1 class="mt-2">{{ conf_name }}</h1>
+
+<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/conference/details/{{ conf_name }}'">Click here to view conference details</button>
+
+<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/gsp/{{ conf_name }}/new_submission';">New Submission +</button>
 
 <table class="table">
     <thead class="thead-light">
         <tr>
-            <th scope="col">Sr. No.</th>
             <th scope="col">Title</th>
             <th scope="col">Status</th>
-            <th scope="col"><button type="submit">Edit</button></th>
-            <th scope="col"><button type="submit">Withdraw</button></th>
+            <th scope="col" colspan="2">Action</th>
         </tr>    
     </thead>
 
     <tbody>
         {% for submission in submissions %}
-            
+            {% comment %}
+            see https://stackoverflow.com/questions/48438575/call-django-on-html-button-click/48438962
+            {% endcomment %}
+            <tr>
+                <td>{{ submission.title }}</td>
+                <td>{{ submission.status }}</td>
+                <td>
+                    <form action="edit" method="GET">
+                        <button type="submit" class="btn btn-warning">Edit</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="withdraw" method="GET">
+                        <button type="submit" class="btn btn-danger">Withdraw</button>
+                    </form>
+                </td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>
 
-{% endblock }
+{% endblock %}
