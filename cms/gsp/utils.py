@@ -13,3 +13,12 @@ def get_user_status(request):
             'abstract': 'ASDFGH'
         }
     }
+
+def get_user_existing_submissions(request):
+
+
+    return {
+        "conf": {
+            'name': None
+        }
+    }

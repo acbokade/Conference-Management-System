@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'conference_base.html' %}
 
 {% block content %}
 <h1 class="mt-2">Conferences list</h1>
@@ -17,7 +17,7 @@
         {% for conf in confs %}
             {% if conf.is_valid %}   
                 <tr>
-                    <td><a href="#">{{ conf.name }}</td>
+                    <td><a href="/gsp/{{ conf.name }}/existing_conf_submissions">{{ conf.name }}</td>
                     <td>{{ conf.start_date }}</td>
                     <td>{{ conf.end_date }}</td>
                     <td>{{ conf.location }}</td>

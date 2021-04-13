@@ -3,6 +3,8 @@ from accounts import utils
 from datetime import datetime
 from . import models
 from accounts import models as accounts_models
+from gsp import models as gsp_models
+from accounts import views as account_views
 from .forms import ConferenceForm, WorkshopForm
 from . import data_access_layer as conference_dao
 # from accounts import data_access_layer as accounts_dao
@@ -129,3 +131,4 @@ def update_workshop(request, name):
             return redirect(list_conferences)
         else:
             return render(request, "update_workshop.html", {"is_logged_in": is_logged_in, "form": form})
+

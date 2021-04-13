@@ -1,7 +1,9 @@
 import conference
 from django.forms import ValidationError
 from django.shortcuts import render, redirect
-
+from accounts import utils as account_utils
+from conference import views as conference_views
+from .models import PaperSubmission, AuthorResponseSubmission, CamPosSubmission
 from .forms import PaperSubmissionForm, AuthorResponseSubmissionForm, CamPosSubmissionForm
 from . import utils
 
@@ -35,3 +37,12 @@ def render_gsp(request, event_id=None):
         context_dict['cam_pos_submission_form'] = CamPosSubmissionForm()
 
         return render(request, "gsp.html", context_dict)
+
+def existing_conf_submissions(request, conf_name):
+    
+    is_logged_in = account_utils.check_login(request)
+    if not is_logged_in:
+        return redirect(account_views.login)
+
+    context_dict = utils.get_user_existing_submissions(request)
+    return render(request, "existing_submissions.html", context_dict)

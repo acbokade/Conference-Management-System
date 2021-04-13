@@ -1,24 +1,27 @@
 from django.db import models
 from accounts.models import User
+from conference.models import Conference, Workshop
 
 # Create your models here.
 class ConferenceSubmission(models.Model):
-    paper_index = None
 
+    conference = models.ForeignKey(
+        Conference, on_delete=models.CASCADE
+    )
+    title = models.CharField(primary_key=True, max_length=50)
+    main_author = models.ForeignKey(
+        User, on_delete=models.CASCADE
+    )
     class Meta:
         abstract = True
-        
-    def __str__(self):
-        return str(paper_index) 
+
 
 
 class PaperSubmission(ConferenceSubmission):
 
-    title = models.CharField(primary_key=True, max_length=50)
     abstract = models.TextField(blank=False)
     pdf_paper = models.FileField(upload_to='tmp/cms-project/main_paper', blank=False)
     supplementary_material = models.FileField(upload_to='tmp/cms-project/supplementary', null=True, blank=True, default=None)
-
     author_list = models.TextField(blank=False)
 
     def __str__(self):
