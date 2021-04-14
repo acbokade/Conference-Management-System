@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from accounts import utils
 from datetime import datetime
 from . import models
@@ -39,7 +40,8 @@ def list_conferences(request):
 def list_my_conferences(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
-        raise Exception("Obtain conferences and workshops, where given user is an - author, reviewer or AC")
+        raise Exception(
+            "Obtain conferences and workshops, where given user is an - author, reviewer or AC")
         # confs = conference_dao.get_all_conferences()
         # workshops = conference_dao.get_all_workshops()
         return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
@@ -72,7 +74,7 @@ def create_conference(request):
                 except accounts_models.User.DoesNotExist:
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
                     pass
-
+            messages.success(request, 'Conference succesfully created')
             return redirect(list_conferences)
         else:
             return render(request, "create_conference.html", {"form": form})
@@ -81,12 +83,17 @@ def create_conference(request):
 
 def update_conference(request, name):
     is_logged_in = utils.check_login(request)
+    conf = conference_dao.get_conference_by_name(name)
     if request.method == "GET":
-        conf = conference_dao.get_conference_by_name(name)
+        cur_user_email = request.COOKIES.get('email')
+        conf_ca_emails = conference_dao.get_a_conference_ca_emails(name)
+        if cur_user_email not in conf_ca_emails:
+            raise Exception(
+                "Only Conference admins are allowed to update conference")
         form = ConferenceForm(instance=conf)
         return render(request, "update_conference.html", {"is_logged_in": is_logged_in, "form": form})
     if request.method == "POST":
-        form = ConferenceForm(request.POST)
+        form = ConferenceForm(request.POST, instance=conf)
         if form.is_valid():
             conference = form.save(commit=True)
             ca_emails = request.POST.get('ca_emails')
@@ -99,6 +106,7 @@ def update_conference(request, name):
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
                     pass
             conference.save()
+            messages.success(request, 'Conference succesfully updated')
             return redirect(list_conferences)
         else:
             return render(request, "update_conference.html", {"is_logged_in": is_logged_in, "form": form})
@@ -132,6 +140,7 @@ def create_workshop(request):
                 except accounts_models.User.DoesNotExist:
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
                     pass
+            messages.success(request, 'Workshop succesfully created')
             return redirect(list_conferences)
         else:
             return render(request, "create_workshop.html", {"is_logged_in": is_logged_in, "form": form})
@@ -140,12 +149,17 @@ def create_workshop(request):
 
 def update_workshop(request, name):
     is_logged_in = utils.check_login(request)
+    conf = conference_dao.get_workshop_by_name(name)
     if request.method == "GET":
-        conf = conference_dao.get_workshop_by_name(name)
+        cur_user_email = request.COOKIES.get('email')
+        workshop_ca_emails = conference_dao.get_a_workshop_ca_emails(name)
+        if cur_user_email not in workshop_ca_emails:
+            raise Exception(
+                "Only Conference admins are allowed to update workshop")
         form = WorkshopForm(instance=conf)
         return render(request, "update_workshop.html", {"is_logged_in": is_logged_in, "form": form})
     if request.method == "POST":
-        form = WorkshopForm(request.POST)
+        form = WorkshopForm(request.POST, instance=conf)
         if form.is_valid():
             workshop = form.save(commit=True)
             ca_emails = request.POST.get('ca_emails')
@@ -158,6 +172,7 @@ def update_workshop(request, name):
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
                     pass
             workshop.save()
+            messages.success(request, 'Conference succesfully updated')
             return redirect(list_conferences)
         else:
             return render(request, "update_workshop.html", {"is_logged_in": is_logged_in, "form": form})

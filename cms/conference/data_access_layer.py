@@ -30,13 +30,20 @@ def get_all_workshops():
 def get_workshop_by_name(name):
     return models.Workshop.objects.get(name=name)
 
+
+def get_a_workshop_ca_emails(name):
+    workshop = get_workshop_by_name(name)
+    ca_emails_string = workshop.ca_emails
+    return ca_emails_string.split()
+
+
 def get_conference_details(conf_name):
 
     query_set = models.Conference.objects.filter(name=conf_name)
 
     if len(query_set) == 0:
         return {
-            'conference_found': False, 
+            'conference_found': False,
             'name': conf_name
         }
 

@@ -1,9 +1,15 @@
 {% extends 'conference_base.html' %}
 
 {% block content %}
-<h1 class="mt-2">Conferences list</h1> 
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h1 class="mt-2">Conferences list</h1>
 <button type="button" class="btn btn-light" style="float: right;"><a href="create_conference">+ Create Conference</a></button>
-
 <table class="table">
     <thead class="thead-light">
       <tr>
