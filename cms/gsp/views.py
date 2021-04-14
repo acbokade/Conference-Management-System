@@ -19,11 +19,11 @@ def render_gsp(request, conf_name=None):
         form = PaperSubmissionForm(request.POST, request.FILES)
         
         email = request.COOKIES.get('email')
-        paper_submission.main_author = accounts_dal.obtain_user_by_email(email)
-        paper_submission.conference = conference_dal.get_conference_by_name(conf_name)
         
         if form.is_valid():
             paper_submission = form.save(commit=False)
+            paper_submission.main_author = accounts_dal.obtain_user_by_email(email)
+            paper_submission.conference = conference_dal.get_conference_by_name(conf_name)
             # write some sanity checks
 
             paper_submission.save()
@@ -31,7 +31,8 @@ def render_gsp(request, conf_name=None):
             return redirect(f'/gsp/{conf_name}/existing_conf_submissions')
         else:
             paper_submission = form.save(commit=False)
-
+            paper_submission.main_author = accounts_dal.obtain_user_by_email(email)
+            paper_submission.conference = conference_dal.get_conference_by_name(conf_name)
             existing_submission = gsp_dal.get_paper_submission(email, conf_name, paper_title)
             print('existing submissions', existing_submission)
             if existing_submission is None:
