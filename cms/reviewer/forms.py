@@ -8,7 +8,6 @@ class ReviewerForm(forms.ModelForm):
         model = Reviewer
         exclude = ['user', 'conference']
         widgets = {
-            # TODO: multiple select from subject areas of conference
             'paper_review_limit': forms.TextInput(attrs={'placeholder': 'Enter atleast 3 papers to review'})
         }
 
