@@ -10,26 +10,26 @@
 
   <div id="divMenuContainer">
 
-    <a href="redirect_userpage">Home</a>
+    <a href="/conference/redirect_userpage">Home</a>
 
     {% if is_logged_in == False %}
-    <a href="redirect_login">Log In</a>
+    <a href="/conference/redirect_login">Log In</a>
     {% endif %}
 
     {% if is_logged_in == False %}
-    <a href="redirect_signup">Sign Up</a>
+    <a href="/conference/redirect_signup">Sign Up</a>
     {% endif %}
 
     {% if is_logged_in == True %}
-    <a href="redirect_logout">Log Out</a>
+    <a href="/conference/redirect_logout">Log Out</a>
     {% endif %}
 
     {% if is_logged_in == True %}
-    <a href="create_conference">Create Conference</a>
+    <a href="/conference/create_conference">Create Conference</a>
     {% endif %}
 
     {% if is_logged_in == True %}
-    <a href="create_workshop">Create Workshop</a>
+    <a href="/conference/create_workshop">Create Workshop</a>
     {% endif %}
 
   </div>

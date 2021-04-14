@@ -16,8 +16,8 @@ def get_all_author_response_submissions():
 def get_all_cam_pos_submissions():
     return models.CamPosSubmission.objects.all()
 
-def delete_paper_submission(email, conf_name, paper_title):
 
+def delete_paper_submission(email, conf_name, paper_title):
     try:
         query_set = models.PaperSubmission.objects.get(
             main_author__email=email,
@@ -28,6 +28,7 @@ def delete_paper_submission(email, conf_name, paper_title):
     except models.PaperSubmission.DoesNotExist:
         pass
 
+
 def get_paper_submission_email_conf_name(email, conf_name):
 
     query_set = models.PaperSubmission.objects.filter(
@@ -36,6 +37,7 @@ def get_paper_submission_email_conf_name(email, conf_name):
         )
 
     return query_set
+
 
 def get_paper_submission(email, conf_name, paper_title):
 
