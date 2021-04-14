@@ -31,7 +31,7 @@ class PaperSubmissionForm(forms.ModelForm):
         pass
 
 
-class AuthorResponseSubmissionForm(forms.ModelForm):
+# class AuthorResponseSubmissionForm(forms.ModelForm):
 
 #     class Meta:
 #         model = AuthorResponseSubmission
@@ -42,7 +42,7 @@ class AuthorResponseSubmissionForm(forms.ModelForm):
 #     #     return True
 
 
-class CamPosSubmissionForm(forms.ModelForm):
+# class CamPosSubmissionForm(forms.ModelForm):
 
 #     class Meta:
 #         model = CamPosSubmission
