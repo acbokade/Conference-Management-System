@@ -9,6 +9,7 @@
 </ul>
 {% endif %}
 <h1 class="mt-2">Conferences list</h1>
+<button type="button" class="btn btn-light" style="float: right;"><a href="create_conference">+ Create Conference</a></button>
 <table class="table">
     <thead class="thead-light">
       <tr>
@@ -29,7 +30,7 @@
                     <td>{{ conf.end_date }}</td>
                     <td>{{ conf.location }}</td>
                     <td><a href="#">{{ conf.url }}</td>
-                    <td><button onclick="location.href = '/gsp/{{ conf.name }}/new_submission';">Create Submission</button></td>
+                    <!-- <td><button onclick="location.href = '/gsp/{{ conf.name }}/new_submission';">Create Submission</button></td> -->
                 </tr>
             {% endif %}
         {% endfor %}

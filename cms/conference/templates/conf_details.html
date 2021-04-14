@@ -1,0 +1,50 @@
+{% extends 'conference_base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    
+<button onclick="location.href = '/';">Home</button></td>
+{% if conference_found %}
+    <div class="jumbotron">
+        <h1 class="display-4">Conference</h1>
+        <h1 class="display-4">{{ name }}</h1>
+        <p class="lead">{{ short_name }}, {{ location }}</p>
+        <br>
+        <p class="lead">From {{start_date }} to {{ end_date }}</p>
+        <hr class="my-4">
+        <p>{{ description }}</p>
+        <p>Conference Website: {{ conf_url }}</p>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h3>Important Dates</h3>
+            <ul class="list-group">
+                <li class="list-group-item">Paper Submission Date: {{ paper_submission_deadline }}</li>
+                <li class="list-group-item">Reviews Available By: {{ review_submission_deadline }}</li>
+                <li class="list-group-item">Cam-Pos Submission Date: {{ cam_pos_submission_deadline }}</li>
+                <li class="list-group-item">Conference Start: {{ start_date }} </li>
+                <li class="list-group-item">Conference End: {{end_date }}</li>
+            </ul>
+        </div>
+    </div>
+
+    
+    <div class="card">
+        <div class="card-body">
+            <h3>Subject-areas</h3>
+            <p>{{ subject_areas }}</p>
+            <h3>Maximum Submissions</h3>
+            <p>{{ expected_submissions }}</p>
+            {% if ACM_conference_confirmation %}
+                <h4>ACM Verified conference</h4>
+            {% endif %}
+            <footer class="card-footer">Conference Admins: {{ ca }}</footer>
+        </div>
+    </div>
+
+{% else %}
+    <h1>Conference {{ name }} not found</h1>
+{% endif %}
+{% endblock %}

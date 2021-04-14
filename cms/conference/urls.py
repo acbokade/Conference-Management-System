@@ -14,4 +14,6 @@ urlpatterns = [
     path('create_workshop', views.create_workshop, name='create_workshop'),
     path('update_workshop/<str:name>',
          views.update_conference, name='update_workshop'),
+     path('details/<conf_name>', views.conference_details),
+
 ]
