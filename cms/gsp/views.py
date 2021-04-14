@@ -2,14 +2,15 @@ import conference
 from django.forms import ValidationError
 from django.shortcuts import render, redirect
 from accounts import utils as account_utils
+from accounts import views as account_views
 from conference import views as conference_views
 from .models import PaperSubmission, AuthorResponseSubmission, CamPosSubmission
 from .forms import PaperSubmissionForm, AuthorResponseSubmissionForm, CamPosSubmissionForm
 from . import utils
 
+
 # Create your views here.
 def render_gsp(request, event_id=None):
-
     if request.method == 'POST':
         form = PaperSubmissionForm(request.POST, request.FILES)
         print(form.errors)
@@ -38,8 +39,8 @@ def render_gsp(request, event_id=None):
 
         return render(request, "gsp.html", context_dict)
 
+
 def existing_conf_submissions(request, conf_name):
-    
     is_logged_in = account_utils.check_login(request)
     if not is_logged_in:
         return redirect(account_views.login)
