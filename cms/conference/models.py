@@ -10,6 +10,7 @@ class ConferenceInfo(models.Model):
     short_name = models.CharField(blank=True, max_length=125)
     location = models.CharField(blank=True, max_length=250)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
     ca_emails = models.TextField(blank=True)
     start_date = models.DateTimeField(null=True)
     paper_submission_deadline = models.DateTimeField(null=True)
@@ -30,9 +31,8 @@ class ConferenceInfo(models.Model):
 
     def clean(self):
         current_datetime = timezone.now()
-
-        if current_datetime > self.start_date:
-
+        # checking this condition only while creation of conference not updation
+        if not self.updated_at and current_datetime > self.start_date:
             raise ValidationError(('Start date %(start_date)s must be set after current date time %(current_datetime)s'),
                                   params={'start_date': self.start_date, 'current_datetime': current_datetime})
 
