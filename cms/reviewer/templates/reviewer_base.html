@@ -7,7 +7,26 @@
     <title>Create conference</title>
   </head>
   <body>
-    <div class="container">
+
+  <div id="divMenuContainer">
+
+    <a href="redirect_userpage">Home</a>
+
+    {% if is_logged_in == False %}
+    <a href="redirect_login">Log In</a>
+    {% endif %}
+
+    {% if is_logged_in == False %}
+    <a href="redirect_signup">Sign Up</a>
+    {% endif %}
+
+    {% if is_logged_in == True %}
+    <a href="redirect_logout">Log Out</a>
+    {% endif %}
+
+  </div>
+
+  <div class="container">
       <div class="row justify-content-center">
         <div class="col-8">
           <h1 class="mt-2"></h1>

@@ -11,11 +11,39 @@ from accounts import data_access_layer as accounts_dao
 # from accounts import data_access_layer as accounts_dao
 
 
+def redirect_signup(request):
+    return redirect('/accounts/signup')
+
+
+def redirect_login(request):
+    return redirect('/accounts/login')
+
+
+def redirect_logout(request):
+    return redirect('/accounts/logout')
+
+
+def redirect_userpage(request):
+    return redirect('/accounts/userpage')
+
+
 def list_conferences(request):
     is_logged_in = utils.check_login(request)
-    confs = conference_dao.get_all_conferences()
-    workshops = conference_dao.get_all_workshops()
-    return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+    if is_logged_in:
+        confs = conference_dao.get_all_conferences()
+        workshops = conference_dao.get_all_workshops()
+        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+    return redirect('/accounts/')
+
+
+def list_my_conferences(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        raise Exception("Obtain conferences and workshops, where given user is an - author, reviewer or AC")
+        # confs = conference_dao.get_all_conferences()
+        # workshops = conference_dao.get_all_workshops()
+        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+    return redirect('/accounts/')
 
 
 def create_conference(request):

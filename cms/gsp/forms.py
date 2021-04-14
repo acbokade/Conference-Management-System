@@ -4,6 +4,7 @@ from .models import PaperSubmission, AuthorResponseSubmission, CamPosSubmission
 from datetime import datetime
 from . import data_access_layer as conference_dao
 
+
 class DateInput(forms.DateInput):
     input_type = "date"
 
@@ -29,6 +30,7 @@ class PaperSubmissionForm(forms.ModelForm):
     # def clean(self):
     #     return True
 
+
 class AuthorResponseSubmissionForm(forms.ModelForm):
 
     class Meta:
@@ -38,6 +40,7 @@ class AuthorResponseSubmissionForm(forms.ModelForm):
 
     # def clean(self):
     #     return True
+
 
 class CamPosSubmissionForm(forms.ModelForm):
 

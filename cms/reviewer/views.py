@@ -9,6 +9,22 @@ from gsp import data_access_layer as gsp_dao
 from conference import views as conf_views
 
 
+def redirect_signup(request):
+    return redirect('/accounts/signup')
+
+
+def redirect_login(request):
+    return redirect('/accounts/login')
+
+
+def redirect_logout(request):
+    return redirect('/accounts/logout')
+
+
+def redirect_userpage(request):
+    return redirect('/accounts/userpage')
+
+
 def apply_as_a_reviewer(request, conf_name):
     is_logged_in = utils.check_login(request)
     if request.method == "GET":
