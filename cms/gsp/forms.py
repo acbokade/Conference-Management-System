@@ -26,8 +26,8 @@ class PaperSubmissionForm(forms.ModelForm):
         exclude = ['conference', 'main_author']
         # widgets = form_widgets
 
-    # def clean(self):
-    #     return True
+    def validate_unique(self):
+        pass
 
 # class AuthorResponseSubmissionForm(forms.ModelForm):
 
