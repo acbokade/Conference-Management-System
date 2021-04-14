@@ -35,7 +35,7 @@ class AuthorResponseSubmissionForm(forms.ModelForm):
 
     class Meta:
         model = AuthorResponseSubmission
-        exclude = ['conference', 'main_author']
+        exclude = ['title', 'conference', 'main_author', 'paper_submission_ref']
         # widgets = form_widgets
 
     # def clean(self):
@@ -46,7 +46,7 @@ class CamPosSubmissionForm(forms.ModelForm):
 
     class Meta:
         model = CamPosSubmission
-        exclude = ['conference', 'main_author']
+        exclude = ['title', 'conference', 'main_author', 'paper_submission_ref']
         # widgets = form_widgets
 
     # def clean(self):

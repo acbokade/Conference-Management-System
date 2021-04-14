@@ -69,8 +69,8 @@ def render_gsp(request, conf_name=None):
         user_status.update(user_status)
 
         context_dict['paper_submission_form'] = PaperSubmissionForm()
-        # context_dict['author_response_submission_form'] = AuthorResponseSubmissionForm()
-        # context_dict['cam_pos_submission_form'] = CamPosSubmissionForm()
+        context_dict['author_response_submission_form'] = AuthorResponseSubmissionForm()
+        context_dict['cam_pos_submission_form'] = CamPosSubmissionForm()
 
         return render(request, "gsp.html", context_dict)
 
