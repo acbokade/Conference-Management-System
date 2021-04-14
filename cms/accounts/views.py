@@ -41,6 +41,11 @@ def singup_process(request):
         except Exception:
             name = request.POST.get('name')
             password = request.POST.get('password').encode('utf-8')
+            confirm_password = request.POST.get('confirm password').encode('utf-8')
+            if password != confirm_password:
+                return render(request, "signup.html", {"is_logged_in": False,
+                                            "user_message": "password and confirm password don't match"})
+
             hashed_password = hashlib.sha224(password).hexdigest()
             user = models.User(email=email, password=hashed_password, name=name)
             user.save()
@@ -73,7 +78,7 @@ def login_process(request):
         email = request.POST.get('email')
         email_validation = utils.check_email_validity(email)
         if not email_validation:
-            return render(request, "login.html", {"is_logged_in": False, "user_message": "Incorrect E-mail address"})
+            return render(request, "login.html", {"is_logged_in": False, "user_message": "E-mail address doesn't exist"})
 
         password = request.POST.get('password').encode('utf-8')
         hashed_password = hashlib.sha224(password).hexdigest()
@@ -84,6 +89,23 @@ def login_process(request):
         response = render(request, "userpage.html", {"is_logged_in": True})
         utils.create_user_cookies(response, email, hashed_password)
         return response
+
+
+def delete_account(request):
+    if request.method == "GET":
+        is_logged_in = utils.check_login(request)
+        if is_logged_in:
+            return render(request, "delete_account.html", {"is_logged_in": is_logged_in, "user_message": ""})
+        return render(request, "login.html", {"is_logged_in": is_logged_in, "user_message": ""})
+    elif request.method == "POST":
+        is_logged_in = utils.check_login(request)
+        if is_logged_in:
+            user = data_access_layer.obtain_user_by_email(request.COOKIES.get('email'))
+            user.delete()
+            response = render(request, "signup.html", {"is_logged_in": False, "user_message": ""})
+            delete_cookies(response)
+            return response
+        return render(request, "login.html", {"is_logged_in": is_logged_in, "user_message": ""})
 
 
 def delete_cookies(response):
@@ -174,10 +196,14 @@ def complete_research_profile_process(request):
 
         try:
             user_research_profile = data_access_layer.obtain_research_profile(request.COOKIES.get('email'))
-            user_research_profile.institution = institution
-            user_research_profile.research_interests = research_interests
-            user_research_profile.highest_degree = highest_degree
-            user_research_profile.google_scholar = google_scholar
+            if institution != "":
+                user_research_profile.institution = institution
+            if research_interests != "":
+                user_research_profile.research_interests = research_interests
+            if highest_degree != "":
+                user_research_profile.highest_degree = highest_degree
+            if google_scholar != "":
+                user_research_profile.google_scholar = google_scholar
             user_research_profile.save()
         except Exception as e:
             user_research_profile = models.ResearchProfile(person=person, institution=institution,
