@@ -188,5 +188,16 @@ def complete_research_profile_process(request):
 
     return render(request, "index.html", {"is_logged_in": False})
 
+
 def redirect_conference(request):
-    return redirect('/conference/list_conferences')
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        return redirect('/conference/list_conferences')
+    return render(request, "index.html", {"is_logged_in": False})
+
+
+def redirect_my_conference(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        return redirect('/conference/list_my_conferences')
+    return render(request, "index.html", {"is_logged_in": False})

@@ -4,6 +4,7 @@ from .models import PaperSubmission #, AuthorResponseSubmission, CamPosSubmissio
 from datetime import datetime
 from . import data_access_layer as conference_dao
 
+
 class DateInput(forms.DateInput):
     input_type = "date"
 
@@ -29,7 +30,8 @@ class PaperSubmissionForm(forms.ModelForm):
     def validate_unique(self):
         pass
 
-# class AuthorResponseSubmissionForm(forms.ModelForm):
+
+class AuthorResponseSubmissionForm(forms.ModelForm):
 
 #     class Meta:
 #         model = AuthorResponseSubmission
@@ -39,7 +41,8 @@ class PaperSubmissionForm(forms.ModelForm):
 #     # def clean(self):
 #     #     return True
 
-# class CamPosSubmissionForm(forms.ModelForm):
+
+class CamPosSubmissionForm(forms.ModelForm):
 
 #     class Meta:
 #         model = CamPosSubmission

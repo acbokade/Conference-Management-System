@@ -57,7 +57,8 @@ form_widgets = {
     'review_submission_deadline': DateInput(),
     'cam_pos_submission_deadline': DateInput(),
     'ca_emails': forms.TextInput(attrs={'placeholder': 'Enter space separated emails of conference admins eg. a@gmail.com b@gmail.com,...'}),
-    'location': forms.TextInput(attrs={'placeholder': 'Enter city and country'})
+    'location': forms.TextInput(attrs={'placeholder': 'Enter city and country'}),
+    'subject_areas': forms.TextInput(attrs={'placeholder': 'Enter comma separated subject areas eg. Segmentation, Adversarial Networks, Recurrent Networks'})
 }
 
 
@@ -68,7 +69,7 @@ class ConferenceForm(forms.ModelForm):
 
     class Meta:
         model = Conference
-        exclude = ['is_valid', 'ca']
+        exclude = ['is_valid', 'ca', 'created_by']
         widgets = form_widgets
 
     def clean(self):
@@ -84,7 +85,7 @@ class WorkshopForm(forms.ModelForm):
 
     class Meta:
         model = Workshop
-        exclude = ['is_valid', 'ca', 'parent_conference']
+        exclude = ['is_valid', 'ca', 'parent_conference', 'created_by']
         widgets = form_widgets
 
     def clean(self):

@@ -7,14 +7,43 @@ from gsp import models as gsp_models
 from accounts import views as account_views
 from .forms import ConferenceForm, WorkshopForm
 from . import data_access_layer as conference_dao
+from accounts import data_access_layer as accounts_dao
 # from accounts import data_access_layer as accounts_dao
+
+
+def redirect_signup(request):
+    return redirect('/accounts/signup')
+
+
+def redirect_login(request):
+    return redirect('/accounts/login')
+
+
+def redirect_logout(request):
+    return redirect('/accounts/logout')
+
+
+def redirect_userpage(request):
+    return redirect('/accounts/userpage')
 
 
 def list_conferences(request):
     is_logged_in = utils.check_login(request)
-    confs = conference_dao.get_all_conferences()
-    workshops = conference_dao.get_all_workshops()
-    return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+    if is_logged_in:
+        confs = conference_dao.get_all_conferences()
+        workshops = conference_dao.get_all_workshops()
+        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+    return redirect('/accounts/')
+
+
+def list_my_conferences(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        raise Exception("Obtain conferences and workshops, where given user is an - author, reviewer or AC")
+        # confs = conference_dao.get_all_conferences()
+        # workshops = conference_dao.get_all_workshops()
+        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+    return redirect('/accounts/')
 
 
 def create_conference(request):
@@ -29,15 +58,16 @@ def create_conference(request):
 
             ca_emails = request.POST.get('ca_emails')
             # adding creator's email to ca_emails
-            creator_email = request.POST['created_by']
+            creator_email = request.COOKIES.get('email')
+            conference.created_by = accounts_dao.obtain_user_by_email(
+                creator_email)
             ca_emails += f" {creator_email}"
             conference.ca_emails = ca_emails
             conference.save()
             ca_emails = ca_emails.split()
             for ca_email in ca_emails:
                 try:
-                    # TODO: add accounts_dao
-                    other_ca = accounts_models.User.objects.get(email=ca_email)
+                    other_ca = accounts_dao.obtain_user_by_email(ca_email)
                     conference.ca.add(other_ca)
                 except accounts_models.User.DoesNotExist:
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
@@ -63,7 +93,7 @@ def update_conference(request, name):
             ca_emails = ca_emails.split()
             for ca_email in ca_emails:
                 try:
-                    other_ca = accounts_models.User.objects.get(email=ca_email)
+                    other_ca = accounts_dao.obtain_user_by_email(ca_email)
                     conference.ca.add(other_ca)
                 except accounts_models.User.DoesNotExist:
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
@@ -97,14 +127,14 @@ def create_workshop(request):
             for ca_email in ca_emails:
                 try:
                     # TODO: add accounts_dao
-                    other_ca = accounts_models.User.objects.get(email=ca_email)
+                    other_ca = accounts_dao.obtain_user_by_email(ca_email)
                     workshop.ca.add(other_ca)
                 except accounts_models.User.DoesNotExist:
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
                     pass
             return redirect(list_conferences)
         else:
-            return render(request, "create_workshop.html", {"form": form})
+            return render(request, "create_workshop.html", {"is_logged_in": is_logged_in, "form": form})
         # afterwards portal admin validates it and sets is_valid field accordingly
 
 
@@ -122,7 +152,7 @@ def update_workshop(request, name):
             ca_emails = ca_emails.split()
             for ca_email in ca_emails:
                 try:
-                    other_ca = accounts_models.User.objects.get(email=ca_email)
+                    other_ca = accounts_dao.obtain_user_by_email(ca_email)
                     workshop.ca.add(other_ca)
                 except accounts_models.User.DoesNotExist:
                     # TODO: handle this event by sending email to creator indicating that the email doesnt exist
@@ -131,8 +161,11 @@ def update_workshop(request, name):
             return redirect(list_conferences)
         else:
             return render(request, "update_workshop.html", {"is_logged_in": is_logged_in, "form": form})
+<<<<<<< HEAD
 
 def conference_details(request, conf_name=None):
 
     context_dict = conference_dao.get_conference_details(conf_name)
     return render(request, "conf_details.html", context_dict)
+=======
+>>>>>>> main

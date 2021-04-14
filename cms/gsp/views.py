@@ -11,6 +11,7 @@ from .models import PaperSubmission#, AuthorResponseSubmission, CamPosSubmission
 from .forms import PaperSubmissionForm#, AuthorResponseSubmissionForm, CamPosSubmissionForm
 from . import utils
 
+
 # Create your views here.
 def render_gsp(request, conf_name=None):
 
@@ -56,8 +57,8 @@ def render_gsp(request, conf_name=None):
 
         return render(request, "gsp.html", context_dict)
 
-def existing_conf_submissions(request, conf_name):
 
+def existing_conf_submissions(request, conf_name):
     is_logged_in = account_utils.check_login(request)
     if not is_logged_in:
         return redirect(account_views.login)
