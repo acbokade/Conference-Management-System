@@ -23,10 +23,6 @@ def get_a_conference_ca_emails(name):
     return ca_emails_string.split()
 
 
-def get_all_workshops():
-    return models.Workshop.objects.all()
-
-
 def get_workshop_by_name(name):
     return models.Workshop.objects.get(name=name)
 
@@ -35,6 +31,12 @@ def get_a_workshop_ca_emails(name):
     workshop = get_workshop_by_name(name)
     ca_emails_string = workshop.ca_emails
     return ca_emails_string.split()
+
+
+def get_conference_subject_areas(name):
+    conf = models.Conference.objects.get(name=name)
+    conf_subject_areas = conf.subject_areas
+    return conf_subject_areas.split(',')
 
 
 def get_conference_details(conf_name):

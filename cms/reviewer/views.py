@@ -87,5 +87,9 @@ def edit_review(request, conf_name, title):
         return render(request, "make_review.html", {"is_logged_in": is_logged_in, "form": form})
 
 
-def reviewer_assignment(request):
-    pass
+def automated_reviewer_assignment(request, conf_name):
+    reviwers_list = reviewer_dao.get_all_reviewers_of_conf(conf_name)
+    paper_submissions_list = gsp_dao.get_all_paper_submissions_of_conf(
+        conf_name)
+
+    conf_subject_areas = conference_dao.get_conference_subject_areas()

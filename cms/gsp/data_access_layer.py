@@ -1,8 +1,14 @@
 from . import models
+from conference import data_access_layer as conference_dao
 
 
 def get_all_paper_submissions():
     return models.objects.objects.all()
+
+
+def get_all_paper_submissions_of_conf(conf_name):
+    conf = conference_dao.get_conference_by_name(conf_name)
+    return list(conf.papersubmission_set.all())
 
 
 def get_paper_submission_by_title(title):
@@ -32,9 +38,9 @@ def delete_paper_submission(email, conf_name, paper_title):
 def get_paper_submission_email_conf_name(email, conf_name):
 
     query_set = models.PaperSubmission.objects.filter(
-        main_author__email=email, 
+        main_author__email=email,
         conference__name=conf_name
-        )
+    )
 
     return query_set
 
