@@ -20,8 +20,8 @@ class ReviewerForm(forms.ModelForm):
             RESEARCH_EXPERTISE_CHOICES = [
                 (subject_area, subject_area) for subject_area in subject_areas]
             super(ReviewerForm, self).__init__(*args, **kwargs)
-            self.fields['area_expertise'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                                      choices=RESEARCH_EXPERTISE_CHOICES)
+            self.fields['area_expertise'] = forms.ChoiceField(
+                choices=RESEARCH_EXPERTISE_CHOICES)
 
 
 class ReviewForm(forms.ModelForm):
