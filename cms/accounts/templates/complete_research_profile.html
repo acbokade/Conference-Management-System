@@ -5,21 +5,17 @@
 <div class="divFormContainer">
         <form action="complete_research_profile_process" method="post">
             {% csrf_token %}
-            <input type="text" placeholder="{{ institution }}" name="institution">
+            Institution: <input type="text" placeholder="{{ institution }}" name="institution">
             <br>
 
-            {% if research_interests == "" %}
-            <input type="text" placeholder="{{ research_interests }}" name="research_interests"
-              value="write your research interests in comma-separated manner, for ex: interest1,interest2,interest3...">
-            {% else %}
+            Research Interests (in comma-separated manner, for ex: interest1,interest2,interest3...):
             <input type="text" placeholder="{{ research_interests }}" name="research_interests">
-            {% endif %}
             <br>
 
-            <input type="text" placeholder="{{ highest_degree }}" name="highest_degree">
+            Highest Degree Earned: <input type="text" placeholder="{{ highest_degree }}" name="highest_degree">
             <br>
 
-            <input type="text" placeholder="{{ google_scholar }}" name="google_scholar">
+            Google Scholar Link: <input type="text" placeholder="{{ google_scholar }}" name="google_scholar">
             <br>
 
             <input type="submit" value="Submit Data">
