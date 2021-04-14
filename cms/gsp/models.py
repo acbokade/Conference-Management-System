@@ -16,6 +16,7 @@ class ConferenceSubmission(models.Model):
     class Meta:
         abstract = True
 
+
 class PaperSubmission(ConferenceSubmission):
 
     abstract = models.TextField(blank=False)

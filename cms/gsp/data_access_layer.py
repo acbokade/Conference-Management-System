@@ -24,7 +24,6 @@ def get_all_cam_pos_submissions():
 
 
 def delete_paper_submission(email, conf_name, paper_title):
-
     try:
         query_set = models.PaperSubmission.objects.get(
             main_author__email=email,
