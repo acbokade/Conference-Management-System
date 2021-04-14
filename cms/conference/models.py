@@ -14,7 +14,8 @@ class ConferenceInfo(models.Model):
     start_date = models.DateTimeField(null=True)
     paper_submission_deadline = models.DateTimeField(null=True)
     review_submission_deadline = models.DateTimeField(null=True)
-    cam_pos_submission_deadline = models.DateTimeField(null=True)
+    cam_pos_submission_deadline = models.DateTimeField(
+        null=True)
     end_date = models.DateTimeField(null=True)
     logo = models.ImageField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)

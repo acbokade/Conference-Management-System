@@ -12,18 +12,21 @@ from conference import views as conf_views
 def apply_as_a_reviewer(request, conf_name):
     is_logged_in = utils.check_login(request)
     if request.method == "GET":
-        form = ReviewerForm()
+        conf = conference_dao.get_conference_by_name(conf_name)
+        conf_subject_areas = conf.subject_areas.split(',')
+        form = ReviewerForm(conf_subject_areas=conf_subject_areas)
         return render(request, "apply_as_a_reviewer.html", {"is_logged_in": is_logged_in, "form": form, "name": conf_name})
     if request.method == "POST":
         form = ReviewerForm(request.POST)
         if form.is_valid():
+            print(form.cleaned_data.get('area_expertise'))
             reviewer = form.save(commit=False)
             reviewer.conference = conference_dao.get_conference_by_name(
                 conf_name)
             reviewer.user = accounts_dao.obtain_user_by_email(
                 request.COOKIES.get('email'))
             reviewer.save()
-            return redirect()
+            return redirect(conf_views.list_conferences)
         return render(request, "apply_as_a_reviewer.html", {"is_logged_in": is_logged_in, "form": form, "name": conf_name})
 
 
@@ -42,7 +45,7 @@ def make_review(request, conf_name, title):
             review.paper_submission = gsp_dao.get_paper_submission_by_title(
                 title)
             review.save()
-            return redirect()
+            return redirect(conf_views.list_conferences)
         return render(request, "make_review.html", {"is_logged_in": is_logged_in, "form": form})
 
 
@@ -64,7 +67,7 @@ def edit_review(request, conf_name, title):
             review.paper_submission = gsp_dao.get_paper_submission_by_title(
                 title)
             review.save()
-            return redirect()
+            return redirect(conf_views.list_conferences)
         return render(request, "make_review.html", {"is_logged_in": is_logged_in, "form": form})
 
 
