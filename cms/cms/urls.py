@@ -25,5 +25,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('conference/', include('conference.urls')),
     path('reviewer/', include('reviewer.urls')),
-    path('gsp/', include('gsp.urls'))
+    path('gsp/', include('gsp.urls')),
+    path('area_chair/', include('area_chair.urls'))
 ]

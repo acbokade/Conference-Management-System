@@ -1,0 +1,44 @@
+{% extends 'area_chair_base.html' %}
+
+{% block content %}
+  <h1 class="mt-2">Select area chairs</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="container">
+        {% for area_expertise, reviewers in area_expertise_reviwer_dict.items %}
+            <h2> Area Expertise - {{ area_expertise }}</h2>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Select User</th>
+                            <th scope="col">Prior reviewing experience</th>
+                            <th scope="col">Prior research paper submissions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reviewer in reviewers %}
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value={{ reviewer.user_id }} id="flexCheckDefault" name="checked_users">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        {{ reviewer.user.name }}
+                                    </label>
+                                </div>
+                            </td>
+                            <td>{{ reviewer.prior_reviewing_experience }}</td>
+                            <td>{{ reviewer.prior_research_paper_submissions }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+        
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-success">Select checked users as area chairs</button>
+  </form>
+{% endblock %}
