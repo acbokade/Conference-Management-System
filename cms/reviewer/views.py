@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Reviewer, InvitedReviewers
+from .models import Reviewer, InvitedReviewers, AssignedReviewers
 from .forms import ReviewerForm, ReviewForm, InviteReviewersForm
 from accounts import utils
 from . import data_access_layer as reviewer_dao
@@ -90,6 +90,7 @@ def edit_review(request, conf_name, title):
 
 
 def automated_reviewer_assignment(request, conf_name):
+    # area chairs already separated from this reviewers' list
     reviwers_list = reviewer_dao.get_all_reviewers_of_conf(conf_name)
     paper_submissions_list = gsp_dao.get_all_paper_submissions_of_conf(
         conf_name)
@@ -109,6 +110,12 @@ def automated_reviewer_assignment(request, conf_name):
         reviewers = subject_area_reviewer_dict[subject_area]
         paper_submissions = subject_area_submissions_dict[subject_area]
         paper_reviewer_mapping = assign_reviewers(reviewers, paper_submissions)
+
+        for paper_submission in paper_reviewer_mapping.keys():
+            reviewer = paper_reviewer_mapping[paper_submission]
+            assigned_reviewer = AssignedReviewers.objects.create(
+                reviewer=reviewer, paper_submission=paper_submission)
+            assigned_reviewer.save()
 
 
 def invite_reviewers(request, conf_name):

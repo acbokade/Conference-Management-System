@@ -1,12 +1,12 @@
 from heapq import heapify, heappop, heappush
-from .constants import MAX_PAPER_REVIEW_LIMIT
+from .constants import MIN_PAPER_REVIEW_LIMIT
 
 
 def assign_reviewers(reviewers, paper_submissions):
     paper_reviewer_mapping = {}
     reviewer_paper_mapping = {}
     paper_review_limit_heap = heapify([
-        [MAX_PAPER_REVIEW_LIMIT, paper_submission] for paper_submission in paper_submissions])
+        [MIN_PAPER_REVIEW_LIMIT, paper_submission] for paper_submission in paper_submissions])
     # assigning each reviewer a set of papers according to his/her paper review limit
     for reviewer in reviewers:
         max_review_limit = min(
@@ -34,4 +34,4 @@ def assign_reviewers(reviewers, paper_submissions):
             max_review_limit = min(
                 reviewer.paper_review_limit, len(paper_review_limit_heap))
 
-    return paper_reviewer_mapping, reviewer_paper_mapping
+    return paper_reviewer_mapping
