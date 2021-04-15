@@ -46,6 +46,23 @@ def apply_as_a_reviewer(request, conf_name):
         return render(request, "apply_as_a_reviewer.html", {"is_logged_in": is_logged_in, "form": form, "name": conf_name})
 
 
+def assigned_papers(request):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        current_reviewer_confs = Reviewer.objects.all().filter(user=request.COOKIES.get('email'))
+        conf_assignments = []
+        for cf in current_reviewer_confs:
+            current_conf_assignment = AssignedReviewers.objects.all().filter(reviewer=cf)
+            current_conf_assigned_papers = [a.paper_submission for a in current_conf_assignment]
+            conf_assignments.extend(current_conf_assigned_papers)
+
+        # code for workshop assignments
+        workshop_assignments = []
+        return render(request, "assigned_papers.html", {"is_logged_in": is_logged_in,
+                                "conf_assignments": conf_assignments, "workshop_assignments": workshop_assignments})
+    return redirect('/accounts/login')
+
+
 def make_review(request, conf_name, title):
     is_logged_in = utils.check_login(request)
     if request.method == "GET":

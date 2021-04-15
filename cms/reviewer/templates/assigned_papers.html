@@ -1,0 +1,39 @@
+{% extends 'reviewer_base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<!--<h1 class="mt-2">{{ conf_name }}</h1>-->
+
+<!--<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/conference/details/{{ conf_name }}'">Click here to view conference details</button>-->
+
+<!--<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/gsp/{{ conf_name }}/new_submission';">New Submission +</button>-->
+
+<h1>Sanity check Assignment Code in reviewer.views.py line 52</h1>
+
+<table class="table">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col">Paper Title</th>
+        <th scope="col">Conference Name</th>
+        <th scope="col" colspan="2" style="text-align:center;">Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for assignment in assignments %}
+    {% comment %}
+    see https://stackoverflow.com/questions/48438575/call-django-on-html-button-click/48438962
+    {% endcomment %}
+    <tr>
+        <td>{{ assignment.title }}</td>
+        <td>{{ assignment.conference.name }}</td>
+        <td><button type="button" class="btn btn-warning"><a href="/reviewer/{{ assignment.conference.name }}/make_review/{{ assignment.title }}" style="color:white;">Make Review</a></button></td>
+        <td><button type="button" class="btn warning"><a href="/reviewer/{{ assignment.conference.name }}/edit_review/{{ assignment.title }}" style="color:white;">Edit Review</a></button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
