@@ -8,3 +8,7 @@ db.sqlite3-journal
 media
 .idea
 tmp
+cms/accounts/migrations
+cms/conference/migrations
+cms/gsp/migrations
+cms/reviewer/migrations

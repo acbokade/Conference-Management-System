@@ -6,11 +6,11 @@ from conference.models import Conference, Workshop
 class ConferenceSubmission(models.Model):
 
     conference = models.ForeignKey(
-        Conference, on_delete=models.CASCADE, null=True
+        Conference, on_delete=models.CASCADE, null=True, blank=False
     )
     title = models.CharField(primary_key=True, max_length=50, blank=True)
     main_author = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True
+        User, on_delete=models.CASCADE, null=True, blank=False
     )
 
     class Meta:
@@ -33,6 +33,9 @@ class PaperSubmission(ConferenceSubmission):
 class AuthorResponseSubmission(ConferenceSubmission):
     response_pdf = models.FileField(
         upload_to='tmp/cms-project/responses', blank=True, null=True)
+    paper_submission_ref = models.ForeignKey(
+        PaperSubmission, on_delete=models.CASCADE, null=False, blank=True
+    )
 
 
 class CamPosSubmission(ConferenceSubmission):
@@ -40,3 +43,6 @@ class CamPosSubmission(ConferenceSubmission):
         upload_to='tmp/cms-project/camera', blank=False)
     poster_pdf = models.FileField(
         upload_to='tmp/cms-project/posters', blank=False)
+    paper_submission_ref = models.ForeignKey(
+        PaperSubmission, on_delete=models.CASCADE, null=False, blank=True
+    )
