@@ -28,6 +28,10 @@ def redirect_userpage(request):
     return redirect('/accounts/userpage')
 
 
+def redirect_assigned_papers(request):
+    return redirect('/reviewer/assigned_papers')
+
+
 def list_conferences(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
@@ -40,11 +44,16 @@ def list_conferences(request):
 def list_my_conferences(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
-        raise Exception(
-            "Obtain conferences and workshops, where given user is an - author, reviewer or AC")
-        # confs = conference_dao.get_all_conferences()
-        # workshops = conference_dao.get_all_workshops()
-        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+        author = accounts_dao.obtain_user_by_email(request.COOKIES.get('email'))
+        conf_submissions = gsp_models.PaperSubmission.objects.all().filter(main_author=author)
+        confs = [subm.conference for subm in conf_submissions]
+
+        # Write code to obtain workshop submission
+        # workshops = gsp_models.PaperSubmission.objects.get(main_author=author)
+        workshops = None
+
+        return render(request, "list_my_conferences.html", {"is_logged_in": is_logged_in,
+                                                         "confs": confs, "workshops": workshops})
     return redirect('/accounts/')
 
 

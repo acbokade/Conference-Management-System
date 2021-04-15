@@ -30,6 +30,10 @@ def redirect_userpage(request):
     return redirect('/accounts/userpage')
 
 
+def redirect_assigned_papers(request):
+    return redirect('/reviewer/assigned_papers')
+
+
 def render_gsp(request, conf_name=None):
     is_logged_in = account_utils.check_login(request)
     if request.method == 'POST':

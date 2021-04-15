@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('delete_account', views.delete_account, name='delete_account'),
     path('conferences', views.redirect_conference),
+    path('assigned_papers', views.redirect_assigned_papers),
     path('my_conferences', views.redirect_my_conference),
     path('profile', views.profile, name='profile'),
     path('userpage', views.userpage, name='userpage'),

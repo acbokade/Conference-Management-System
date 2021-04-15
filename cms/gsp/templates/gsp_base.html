@@ -27,6 +27,11 @@
             {% if is_logged_in == True %}
             <a href="/gsp/redirect_logout">Log Out</a>
             {% endif %}
+
+            {% if is_logged_in == True %}
+            <a href="/gsp/redirect_assigned_papers">Assigned Papers</a>
+            {% endif %}
+
           </div>
 
           {% block content %}
