@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Reviewer
+from .models import Reviewer, InvitedReviewers
 from .forms import ReviewerForm, ReviewForm, InviteReviewersForm
 from accounts import utils
 from . import data_access_layer as reviewer_dao
@@ -113,8 +113,8 @@ def automated_reviewer_assignment(request, conf_name):
 
 def invite_reviewers(request, conf_name):
     is_logged_in = utils.check_login(request)
+    conf = conference_dao.get_conference_by_name(conf_name)
     if request.method == "GET":
-        conf = conference_dao.get_conference_by_name(conf_name)
         all_conf_paper_submissions = conf.papersubmission_set.all()
         conf_users = set()
         for paper_submission in all_conf_paper_submissions:
@@ -125,5 +125,11 @@ def invite_reviewers(request, conf_name):
         return render(request, "invite_reviewers.html", {"is_logged_in": is_logged_in, "conf_users": conf_users})
     if request.method == "POST":
         selected_users_emails = request.POST.getlist('checked_users')
-        # add to database
+        for selected_user_email in selected_users_emails:
+            selected_user = accounts_dao.obtain_user_by_email(
+                selected_user_email)
+            invited_reviewer = InvitedReviewers.objects.create(
+                user=selected_user, conference=conf)
+            invited_reviewer.save()
+        # send emails to invited reviewers
         return redirect(conf_views.list_conferences)

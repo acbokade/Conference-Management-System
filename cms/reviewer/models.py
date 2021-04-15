@@ -36,3 +36,4 @@ class Review(models.Model):
 
 class InvitedReviewers(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
