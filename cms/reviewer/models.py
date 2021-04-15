@@ -32,3 +32,7 @@ class Review(models.Model):
 
     def __str__(self):
         return self.paper_submission.title
+
+
+class InvitedReviewers(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

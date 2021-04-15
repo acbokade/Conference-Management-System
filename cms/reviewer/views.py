@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import Reviewer
-from .forms import ReviewerForm, ReviewForm
+from .forms import ReviewerForm, ReviewForm, InviteReviewersForm
 from accounts import utils
 from . import data_access_layer as reviewer_dao
 from accounts import data_access_layer as accounts_dao
 from conference import data_access_layer as conference_dao
 from gsp import data_access_layer as gsp_dao
 from conference import views as conf_views
+from .utils import assign_reviewers
 
 
 def redirect_signup(request):
@@ -35,7 +36,6 @@ def apply_as_a_reviewer(request, conf_name):
     if request.method == "POST":
         form = ReviewerForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data.get('area_expertise'))
             reviewer = form.save(commit=False)
             reviewer.conference = conference_dao.get_conference_by_name(
                 conf_name)
@@ -57,6 +57,8 @@ def make_review(request, conf_name, title):
             review = form.save(commit=False)
             # TODO: prevent any user from making review
             review.reviewer = reviewer_dao.get_reviewer_by_email(
+                request.COOKIES.get('email'))
+            paper_submissions = subject_area_submissions_dict[subject_area] = reviewer_dao.get_reviewer_by_email(
                 request.COOKIES.get('email'))
             review.paper_submission = gsp_dao.get_paper_submission_by_title(
                 title)
@@ -93,3 +95,35 @@ def automated_reviewer_assignment(request, conf_name):
         conf_name)
 
     conf_subject_areas = conference_dao.get_conference_subject_areas()
+
+    subject_area_reviewer_dict = {}
+    for reviewer in reviwers_list:
+        subject_area_reviewer_dict[reviewer.area_expertise] = reviewer
+
+    subject_area_submissions_dict = {}
+    for paper_submission in paper_submissions_list:
+        subject_area_submissions_dict[paper_submission.subject_area] = paper_submission
+
+    # reviewer assignment done for each subject area independently
+    for subject_area in conf_subject_areas:
+        reviewers = subject_area_reviewer_dict[subject_area]
+        paper_submissions = subject_area_submissions_dict[subject_area]
+        paper_reviewer_mapping = assign_reviewers(reviewers, paper_submissions)
+
+
+def invite_reviewers(request, conf_name):
+    is_logged_in = utils.check_login(request)
+    if request.method == "GET":
+        conf = conference_dao.get_conference_by_name(conf_name)
+        all_conf_paper_submissions = conf.papersubmission_set.all()
+        conf_users = set()
+        for paper_submission in all_conf_paper_submissions:
+            conf_users.add(paper_submission.main_author)
+        conf_users = list(conf_users)
+        # form = InviteReviewersForm(conf_users=conf_users)
+        # print(form.fields['conference_users'].choices)
+        return render(request, "invite_reviewers.html", {"is_logged_in": is_logged_in, "conf_users": conf_users})
+    if request.method == "POST":
+        selected_users_emails = request.POST.getlist('checked_users')
+        # add to database
+        return redirect(conf_views.list_conferences)

@@ -1,0 +1,50 @@
+{% extends 'reviewer_base.html' %}
+
+{% block content %}
+  <h1 class="mt-2">Invite reviewers</h1>
+  <form method="post">
+    {% csrf_token %}
+    <!-- {{ form.as_p }} -->
+    <div class="container">
+        <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Select User</th>
+                    <th scope="col">Institution</th>
+                    <th scope="col">Research Interest</th>
+                    <th scope="col">Highest degree</th>
+                    <th scope="col">Google scholar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for conf_user in conf_users %}
+                <tr>
+                <td>
+                    <!-- <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                        <label class="custom-control-label" for="customCheck1"></label>
+                    </div> -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value={{ conf_user.email }} id="flexCheckDefault" name="checked_users">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            {{ conf_user.name }}
+                        </label>
+                    </div>
+                </td>
+                <td>{{ conf_user.research_profileinstitution }}</td>
+                <td>{{ conf_user.research_interest }}</td>
+                <td>{{ conf_user.highest_degree }}</td>
+                <td>{{ conf_user.google_scholar }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+            </table>
+        </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Invite selected reviewers</button>
+  </form>
+{% endblock %}
