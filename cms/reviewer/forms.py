@@ -28,3 +28,19 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         exclude = ['paper_submission', 'reviewer']
+
+
+class InviteReviewersForm(forms.Form):
+    pass
+
+    # def __init__(self, *args, **kwargs):
+    #     if "conf_users" not in kwargs:
+    #         super(InviteReviewersForm, self).__init__(*args, **kwargs)
+    #     else:
+    #         conf_users = kwargs.pop('conf_users')
+    #         CONF_USERS = [
+    #             (conf_user.name, conf_user.name) for conf_user in conf_users]
+    #         super(InviteReviewersForm, self).__init__(*args, **kwargs)
+    #         self.fields['conference_users'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+    #                                                                     choices=CONF_USERS)
+    #         self.fields['research_interests'].widget.attrs['readonly'] = True

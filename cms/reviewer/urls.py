@@ -12,4 +12,6 @@ urlpatterns = [
          views.make_review, name='make_review'),
     path('<str:conf_name>/edit_review/<str:title>',
          views.edit_review, name='edit_review'),
+    path('<str:conf_name>/invite_reviewers/',
+         views.invite_reviewers, name='invite_reviewers'),
 ]
