@@ -9,6 +9,7 @@ from accounts import views as account_views
 from . import data_access_layer as conference_dao
 from accounts import data_access_layer as accounts_dao
 from .forms import ConferenceForm
+from . import utils as conf_utils
 # from accounts import data_access_layer as accounts_dao
 
 
@@ -36,7 +37,12 @@ def list_conferences(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
         confs = conference_dao.get_all_conferences()
-        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs})
+        is_ca_confs = conf_utils.obtain_ca_boolean_array(request.COOKIES.get('email'), confs)
+        is_invited_as_revs = conf_utils.obtain_invited_rev_boolean_array(request.COOKIES.get('email'), confs)
+        assert len(confs) == len(is_ca_confs) == len(is_invited_as_revs)
+
+        confs_list = zip(confs, is_ca_confs, is_invited_as_revs)
+        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs_list": confs_list})
     return redirect('/accounts/')
 
 

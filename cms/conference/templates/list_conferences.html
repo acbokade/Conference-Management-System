@@ -19,12 +19,13 @@
         <th scope="col">End Date</th>
         <th scope="col">Location</th>
         <th scope="col">External URL</th>
-        <th scope="col">Apply as Reviewer</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
     </thead>
 
     <tbody>
-        {% for conf in confs %}
+        {% for conf, is_ca_conf, is_invited_as_rev in confs_list %}
             {% if conf.is_valid %}   
                 <tr>
                     <td><img src="{{ conf.logo_url }}" alt=" " width="65" height="65"></td>
@@ -33,7 +34,14 @@
                     <td>{{ conf.end_date }}</td>
                     <td>{{ conf.location }}</td>
                     <td><a href="#">{{ conf.url }}</a></td>
-                    <td><button onclick="location.href = '/reviewer/{{ conf.name }}/apply_as_a_reviewer';">Apply</button></td>
+
+                    {% if is_invited_as_rev %}
+                    <td><button onclick="location.href = '/reviewer/{{ conf.name }}/apply_as_a_reviewer';">Apply as Reviewer</button></td>
+                    {% endif %}
+
+                    {% if is_ca_conf %}
+                    <td><button onclick="location.href = '/area_chair/{{ conf.name }}/select_area_chair';">Select ACs</button></td>
+                    {% endif %}
                     <!-- <td><button onclick="location.href = '/gsp/{{ conf.name }}/new_submission';">Create Submission</button></td> -->
                 </tr>
             {% endif %}
