@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Conference, Workshop
+from .models import Conference
 
 
 class PortalAdmin(admin.ModelAdmin):
@@ -7,4 +7,3 @@ class PortalAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Conference, PortalAdmin)
-admin.site.register(Workshop, PortalAdmin)

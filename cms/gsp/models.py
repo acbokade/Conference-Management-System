@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import User
-from conference.models import Conference, Workshop
+from conference.models import Conference
 
 
 class ConferenceSubmission(models.Model):
