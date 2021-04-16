@@ -33,10 +33,11 @@
                         </label>
                     </div>
                 </td>
-                <td>{{ conf_user.research_profileinstitution }}</td>
-                <td>{{ conf_user.research_interest }}</td>
-                <td>{{ conf_user.highest_degree }}</td>
-                <td>{{ conf_user.google_scholar }}</td>
+                <!-- check this -->
+                <td>{{ conf_user.research_profile.institution }}</td>
+                <td>{{ conf_user.research_profile.research_interest }}</td>
+                <td>{{ conf_user.research_profile.highest_degree }}</td>
+                <td>{{ conf_user.research_profile.google_scholar }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

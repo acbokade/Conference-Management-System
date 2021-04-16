@@ -47,7 +47,7 @@ def list_conferences(request):
 
         confs_list = zip(confs, is_ca_confs, is_invited_as_revs)
         return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs_list": confs_list})
-    return redirect('/accounts/')
+    return redirect('/accounts/login')
 
 
 def list_my_conferences(request):
@@ -63,7 +63,7 @@ def list_my_conferences(request):
 
         return render(request, "list_my_conferences.html", {"is_logged_in": is_logged_in,
                                                             "confs": confs})
-    return redirect('/accounts/')
+    return redirect('/accounts/login')
 
 
 def create_conference(request):
@@ -96,7 +96,7 @@ def create_conference(request):
         else:
             form = ConferenceForm()
         return render(request, "create_conference.html", {"is_logged_in": is_logged_in, "form": form})
-    return redirect('/accounts/')
+    return redirect('/accounts/login')
 
 
 def update_conference(request, name):
@@ -136,7 +136,7 @@ def update_conference(request, name):
         else:
             form = ConferenceForm(instance=conf)
         return render(request, "update_conference.html", {"is_logged_in": is_logged_in, "form": form})
-    return redirect('/accounts/')
+    return redirect('/accounts/login')
 
 
 def conference_details(request, conf_name=None):
@@ -145,4 +145,4 @@ def conference_details(request, conf_name=None):
         context_dict = conference_dao.get_conference_details(conf_name)
         context_dict['is_logged_in'] = is_logged_in
         return render(request, "conf_details.html", context_dict)
-    return redirect('/accounts/')
+    return redirect('/accounts/login')
