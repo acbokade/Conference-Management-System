@@ -6,9 +6,11 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
-.idea
+.idea/*
 tmp
-cms/accounts/migrations
-cms/conference/migrations
-cms/gsp/migrations
-cms/reviewer/migrations
+accounts/migrations
+conference/migrations
+gsp/migrations
+reviewer/migrations
+area_chair/migrations
+**/migrations
