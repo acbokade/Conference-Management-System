@@ -12,13 +12,17 @@
   <div class="divLoginSignup">
     <form action="signup_process" method="post">
       {% csrf_token %}
-      <input type="text" placeholder="Email" name="email">
+      <input type="text" placeholder="Email" name="email" required>
       <br>
-      <input type="password" placeholder="Password" name="password">
+      <input type="password" placeholder="Password" name="password" required>
       <br>
-      <input type="password" placeholder="Password" name="confirm password">
+      <input type="password" placeholder="Password" name="confirm password" required>
       <br>
-      <input type="text" placeholder="Full Name" name="name">
+      <input type="text" placeholder="Full Name" name="name" required>
+      <br>
+      <input type="text" placeholder="Type Security Question" name="security question" required>
+      <br>
+      <input type="text" placeholder="Type Security Answer" name="security answer" required>
       <br>
 <!--      <input type="radio" name="user_type" value="chair">Chair-->
 <!--      <br>-->

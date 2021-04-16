@@ -10,6 +10,8 @@ urlpatterns = [
     path('login_process', views.login_process, name='login_process'),
     path('logout', views.logout, name='logout'),
     path('delete_account', views.delete_account, name='delete_account'),
+    path('forgot_password', views.forgot_password, name='forgot_password'),
+    path('make_new_password_process', views.make_new_password_process, name='make_new_password_process'),
     path('conferences', views.redirect_conference),
     path('assigned_papers', views.redirect_assigned_papers),
     path('my_conferences', views.redirect_my_conference),

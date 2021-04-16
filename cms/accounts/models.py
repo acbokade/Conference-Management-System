@@ -14,3 +14,9 @@ class ResearchProfile(models.Model):
     research_interests = models.CharField(max_length=500)
     highest_degree = models.CharField(max_length=250)
     google_scholar = models.CharField(max_length=250)
+
+
+class SecurityQuestions(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    question = models.TextField(null=False)
+    answer = models.TextField(null=False)

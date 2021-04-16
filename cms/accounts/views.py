@@ -50,6 +50,11 @@ def singup_process(request):
             user = models.User(email=email, password=hashed_password, name=name)
             user.save()
 
+            security_q = request.POST.get('security question')
+            security_a = request.POST.get('security answer')
+            security_fields = models.SecurityQuestions(user=user, question=security_q, answer=security_a)
+            security_fields.save()
+
             context = {"is_logged_in": False, "user_message": "Account Successfully Created"}
             response = render(request, "login.html", context)
             # utils.create_user_cookies(response, email, user.password)
@@ -166,6 +171,59 @@ def change_password_process(request):
                 return render(request, "change_password.html", {"is_logged_in": is_logged_in,
                                     "user_message": "new password and confirm password do not match"})
 
+    return render(request, "index.html", {"is_logged_in": False})
+
+
+def forgot_password(request):
+    is_logged_in = utils.check_login(request)
+    if not is_logged_in:
+        if request.method == "GET":
+            # security_question = data_access_layer.obtain_user_security_question(request.COOKIES.get('email'))
+            return render(request, "forgot_password.html", {"is_logged_in": is_logged_in})
+
+        elif request.method == "POST":
+            email_address = request.POST['email']
+            input_security_question = request.POST['security question']
+            input_security_answer = request.POST['security answer']
+
+            email_validation = utils.check_email_validity(email_address)
+            if not email_validation:
+                # security_question = data_access_layer.obtain_user_security_question(request.COOKIES.get('email'))
+                return render(request, "forgot_password.html", {"is_logged_in": is_logged_in,
+                                                        "user_message": "Email doesn't exists"})
+
+            user_security_question = data_access_layer.obtain_user_security_question(email_address)
+            user_security_answer = data_access_layer.obtain_user_security_answer(email_address)
+
+            if user_security_question != input_security_question or user_security_answer != input_security_answer:
+                # security_question = data_access_layer.obtain_user_security_question(request.COOKIES.get('email'))
+                return render(request, "forgot_password.html", {"is_logged_in": is_logged_in,
+                                        "user_message": "Incorrect Security Question/Answer"})
+
+            return render(request, "make_new_password.html", {"is_logged_in": False})
+
+    return render(request, "index.html", {"is_logged_in": False})
+
+
+def make_new_password_process(request):
+    if request.method == "POST":
+        email_address = request.POST['confirm_email']
+        new_password = request.POST['new_password']
+        confirm_new_password = request.POST['confirm_password']
+
+        email_validation = utils.check_email_validity(email_address)
+        if not email_validation:
+            return render(request, "make_new_password.html", {"is_logged_in": False,
+                                        "user_message": "Email doesn't exist"})
+
+        if new_password != confirm_new_password:
+            return render(request, "make_new_password.html", {"is_logged_in": False,
+                                            "user_message": "New password and Confirm Password don't match"})
+
+        user = data_access_layer.obtain_user_by_email(email_address)
+        user.password = hashlib.sha224(new_password.encode('utf-8')).hexdigest()
+        user.save()
+        return render(request, "login.html", {"is_logged_in": False})
     return render(request, "index.html", {"is_logged_in": False})
 
 
