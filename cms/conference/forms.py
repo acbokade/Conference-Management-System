@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ValidationError
-from .models import Conference, Workshop
+from .models import Conference
 from .constants import *
 from datetime import datetime
 from . import data_access_layer as conference_dao
@@ -76,35 +76,3 @@ class ConferenceForm(forms.ModelForm):
         cleaned_data = super(ConferenceForm, self).clean()
         # checking dates validation
         cleaned_data = check_date_validations(cleaned_data)
-
-
-class WorkshopForm(forms.ModelForm):
-
-    def validate_unique(self):
-        pass
-
-    class Meta:
-        model = Workshop
-        exclude = ['is_valid', 'ca', 'parent_conference', 'created_by']
-        widgets = form_widgets
-
-    def clean(self):
-        cleaned_data = super(WorkshopForm, self).clean()
-
-        # checking validity of parent conference
-        parent_conf_name = cleaned_data['parent_conference_name']
-        all_conf_names = conference_dao.get_all_conferences_names()
-        if parent_conf_name not in all_conf_names:
-            raise ValidationError(
-                f"Parent conference name {parent_conf_name} is not valid")
-
-        # checking dates validation
-        check_date_validations(cleaned_data)
-
-        # checking ca emails validation
-        parent_conf_ca_emails = set(conference_dao.get_a_conference_ca_emails(
-            parent_conf_name))
-        workshop_ca_emails = set(cleaned_data['ca_emails'].split())
-        if parent_conf_ca_emails != workshop_ca_emails:
-            raise ValidationError(
-                "Entered Ca emails are not same as that of parent conference")

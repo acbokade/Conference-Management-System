@@ -18,7 +18,7 @@ class ConferenceInfo(models.Model):
     cam_pos_submission_deadline = models.DateTimeField(
         null=True)
     end_date = models.DateTimeField(null=True)
-    logo = models.ImageField(null=True, blank=True)
+    logo = models.ImageField(null=True, blank=True, upload_to='images')
     url = models.URLField(null=True, blank=True)
     # TODO: text choices
     subject_areas = models.TextField(max_length=200)
@@ -52,25 +52,18 @@ class ConferenceInfo(models.Model):
             raise ValidationError(('Cam Poster deadline %(cam_pos_submission_deadline)s must be before end date %(end_date)s'),
                                   params={'cam_pos_submission_deadline': self.cam_pos_submission_deadline, 'end_date': self.end_date})
 
+    @property
+    def logo_url(self):
+        if self.logo and hasattr(self.logo, 'url'):
+            return self.logo.url
+        return "/static/images/no_logo.png"
+
 
 class Conference(ConferenceInfo):
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='created_by')
     ca = models.ManyToManyField(
         User, related_name='ca')  # conference admins
-
-    def __str__(self):
-        return self.name
-
-
-class Workshop(ConferenceInfo):
-    created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='workshop_created_by')
-    ca = models.ManyToManyField(
-        User, related_name='workshop_ca')  # conference admins
-    parent_conference_name = models.CharField(max_length=250)
-    parent_conference = models.ForeignKey(
-        Conference, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
