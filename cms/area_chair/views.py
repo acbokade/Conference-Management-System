@@ -48,4 +48,5 @@ def select_area_chair(request, conf_name):
             else:
                 area_expertise_reviwer_dict[area_expertise].append(
                     conf_reviewer)
-    return render(request, "select_area_chair.html", {"in_logged_in": is_logged_in, "area_expertise_reviwer_dict": area_expertise_reviwer_dict})
+    return render(request, "select_area_chair.html",
+                  {"in_logged_in": is_logged_in, "area_expertise_reviwer_dict": area_expertise_reviwer_dict})

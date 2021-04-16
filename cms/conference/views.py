@@ -7,6 +7,7 @@ from accounts import models as accounts_models
 from gsp import models as gsp_models
 from accounts import views as account_views
 from .forms import ConferenceForm, WorkshopForm
+from . import utils as conf_utils
 from . import data_access_layer as conference_dao
 from accounts import data_access_layer as accounts_dao
 # from accounts import data_access_layer as accounts_dao
@@ -37,7 +38,13 @@ def list_conferences(request):
     if is_logged_in:
         confs = conference_dao.get_all_conferences()
         workshops = conference_dao.get_all_workshops()
-        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs": confs, "workshops": workshops})
+        is_ca_confs = conf_utils.obtain_ca_boolean_array(request.COOKIES.get('email'), confs)
+        is_invited_as_revs = conf_utils.obtain_invited_rev_boolean_array(request.COOKIES.get('email'), confs)
+        assert len(confs) == len(is_ca_confs) == len(is_invited_as_revs)
+
+        confs_list = zip(confs, is_ca_confs, is_invited_as_revs)
+        return render(request, "list_conferences.html", {"is_logged_in": is_logged_in, "confs_list": confs_list,
+                                                    "workshops": workshops})
     return redirect('/accounts/')
 
 
