@@ -19,3 +19,11 @@ def get_reviewer_by_email(email):
 def get_all_reviewers_of_conf(conf_name):
     conf = conference_dao.get_conference_by_name(conf_name)
     return list(conf.reviwers_set.all())
+
+
+def get_invited_reviewers_emails_of_conf(conf_name):
+    conf = conference_dao.get_conference_by_name(conf_name)
+    invited_reviewers = conf.invitedreviewers_set.all()
+    invited_reviewers_email_list = [
+        invited_reviewer.user.email for invited_reviewer in invited_reviewers]
+    return invited_reviewers_email_list
