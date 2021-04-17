@@ -164,54 +164,106 @@ def edit_review(request, conf_name, title):
     return redirect('/accounts/login')
 
 
-def automated_reviewer_assignment(request, conf_name):
-    # area chairs already separated from this reviewers' list
-    reviwers_list = reviewer_dao.get_all_reviewers_of_conf(conf_name)
-    paper_submissions_list = gsp_dao.get_all_paper_submissions_of_conf(
-        conf_name)
-
-    conf_subject_areas = conference_dao.get_conference_subject_areas()
-
-    subject_area_reviewer_dict = {}
-    for reviewer in reviwers_list:
-        subject_area_reviewer_dict[reviewer.area_expertise] = reviewer
-
-    subject_area_submissions_dict = {}
-    for paper_submission in paper_submissions_list:
-        subject_area_submissions_dict[paper_submission.subject_area] = paper_submission
-
-    # reviewer assignment done for each subject area independently
-    for subject_area in conf_subject_areas:
-        reviewers = subject_area_reviewer_dict[subject_area]
-        paper_submissions = subject_area_submissions_dict[subject_area]
-        paper_reviewer_mapping = assign_reviewers(reviewers, paper_submissions)
-
-        for paper_submission in paper_reviewer_mapping.keys():
-            reviewer = paper_reviewer_mapping[paper_submission]
-            assigned_reviewer = AssignedReviewers.objects.create(
-                reviewer=reviewer, paper_submission=paper_submission)
-            assigned_reviewer.save()
-
-
 def invite_reviewers(request, conf_name):
     is_logged_in = utils.check_login(request)
-    conf = conference_dao.get_conference_by_name(conf_name)
-    if request.method == "GET":
-        all_conf_paper_submissions = conf.papersubmission_set.all()
-        conf_users = set()
-        for paper_submission in all_conf_paper_submissions:
-            conf_users.add(paper_submission.main_author)
-        conf_users = list(conf_users)
-        # form = InviteReviewersForm(conf_users=conf_users)
-        # print(form.fields['conference_users'].choices)
-        return render(request, "invite_reviewers.html", {"is_logged_in": is_logged_in, "conf_users": conf_users})
-    if request.method == "POST":
-        selected_users_emails = request.POST.getlist('checked_users')
-        for selected_user_email in selected_users_emails:
-            selected_user = accounts_dao.obtain_user_by_email(
-                selected_user_email)
-            invited_reviewer = InvitedReviewers.objects.create(
-                user=selected_user, conference=conf)
-            invited_reviewer.save()
-        # send emails to invited reviewers
-        return redirect(conf_views.list_conferences)
+    if is_logged_in:
+        cur_user_email = request.COOKIES.get('email')
+        # check if user is CA of the conference or not
+        conf_ca_emails = conference_dao.get_a_conference_ca_emails(conf_name)
+        if cur_user_email not in conf_ca_emails:
+            messages.error(
+                request, f"Sorry, you are not a conference admin for {conf_name} conference")
+            redirect(conf_views.list_conferences)
+        conf = conference_dao.get_conference_by_name(conf_name)
+        if request.method == "POST":
+            selected_users_emails = request.POST.getlist('checked_users')
+            for selected_user_email in selected_users_emails:
+                selected_user = accounts_dao.obtain_user_by_email(
+                    selected_user_email)
+                invited_reviewer = InvitedReviewers.objects.create(
+                    user=selected_user, conference=conf)
+                invited_reviewer.save()
+            # TODO: send emails to invited reviewers
+            return redirect(conf_views.list_conferences)
+        else:
+            all_conf_paper_submissions = conf.papersubmission_set.all()
+            conf_users = set()
+            for paper_submission in all_conf_paper_submissions:
+                conf_users.add(paper_submission.main_author)
+            conf_users = list(conf_users)
+            return render(request, "invite_reviewers.html", {"is_logged_in": is_logged_in, "conf_users": conf_users})
+    return redirect('/accounts/login')
+
+
+def automated_reviewer_assignment(request, conf_name):
+    # area chairs already separated from this reviewers' list
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        cur_user_email = request.COOKIES.get('email')
+        # check if user is CA of the conference or not
+        conf_ca_emails = conference_dao.get_a_conference_ca_emails(conf_name)
+        if cur_user_email not in conf_ca_emails:
+            messages.error(
+                request, f"Sorry, you are not a conference admin for {conf_name} conference")
+            redirect(conf_views.list_conferences)
+        if request.method == "POST":
+            reviewers_list = reviewer_dao.get_all_reviewers_of_conf(conf_name)
+            paper_submissions_list = gsp_dao.get_all_paper_submissions_of_conf(
+                conf_name)
+
+            conf_subject_areas = conference_dao.get_conference_subject_areas()
+
+            subject_area_reviewer_dict = {}
+            for reviewer in reviewers_list:
+                if reviewer.area_expertise not in subject_area_reviewer_dict:
+                    subject_area_reviewer_dict[reviewer.area_expertise] = [
+                        reviewer]
+                else:
+                    subject_area_reviewer_dict[reviewer.area_expertise].append(
+                        reviewer)
+
+            subject_area_submissions_dict = {}
+            for paper_submission in paper_submissions_list:
+                if paper_submission.subject_area not in subject_area_submissions_dict:
+                    subject_area_submissions_dict[paper_submission.subject_area] = [
+                        paper_submission]
+                else:
+                    subject_area_submissions_dict[paper_submission.subject_area].append(
+                        paper_submission)
+
+            # reviewer assignment done for each subject area independently
+            for subject_area in conf_subject_areas:
+                reviewers = subject_area_reviewer_dict[subject_area]
+                paper_submissions = subject_area_submissions_dict[subject_area]
+                paper_reviewer_mapping = assign_reviewers(
+                    reviewers, paper_submissions)
+
+                for paper_submission in paper_reviewer_mapping.keys():
+                    assigned_reviewers = paper_reviewer_mapping[paper_submission]
+                    for assigned_reviewer in assign_reviewers:
+                        assigned_reviewer_obj = AssignedReviewers.objects.create(
+                            reviewer=assigned_reviewer, paper_submission=paper_submission)
+                        assigned_reviewer_obj.save()
+            messages.info(
+                request, f"Automated reviewer assignment succesfully completed for {conf_name} conference")
+            redirect(conf_views.list_conferences)
+        else:
+            return render(request, "automated_reviewer_assignment.html")
+    return redirect('/accounts/login')
+
+
+def manual_reviewer_assignment(request, conf_name):
+    is_logged_in = utils.check_login(request)
+    if is_logged_in:
+        cur_user_email = request.COOKIES.get('email')
+        # check if user is CA of the conference or not
+        conf_ca_emails = conference_dao.get_a_conference_ca_emails(conf_name)
+        if cur_user_email not in conf_ca_emails:
+            messages.error(
+                request, f"Sorry, you are not a conference admin for {conf_name} conference")
+            redirect(conf_views.list_conferences)
+        if request.method == "POST":
+            pass
+        else:
+            pass
+    return redirect('/accounts/login')
