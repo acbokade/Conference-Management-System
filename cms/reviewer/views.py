@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.utils import timezone
 from .models import Reviewer, InvitedReviewers, AssignedReviewers
 from .forms import ReviewerForm, ReviewForm, InviteReviewersForm
 from accounts import utils
@@ -9,6 +10,7 @@ from conference import data_access_layer as conference_dao
 from gsp import data_access_layer as gsp_dao
 from conference import views as conf_views
 from .utils import assign_reviewers
+from .constants import REVIEWER_APPLICATION_DEADLINE, INVITE_REVIEWERS_DEADLINE
 
 
 def redirect_signup(request):
@@ -38,6 +40,12 @@ def apply_as_a_reviewer(request, conf_name):
         if cur_user_email not in invited_reviewers_emails:
             messages.error(
                 request, f"Sorry, you are not invited reviewer for this conference")
+            redirect(conf_views.list_conferences)
+        # reviewer application deadline check
+        cur_time = timezone.now()
+        if (cur_time - conf.paper_submission_deadline).days > REVIEWER_APPLICATION_DEADLINE:
+            messages.error(
+                request, f"Sorry, Reviewer application deadline has been elapsed")
             redirect(conf_views.list_conferences)
         if request.method == "POST":
             form = ReviewerForm(request.POST)
@@ -105,6 +113,13 @@ def make_review(request, conf_name, title):
             messages.error(
                 request, f"Sorry, you are not a reviewer for {title} paper")
             redirect(conf_views.list_conferences)
+        # review submission deadline check
+        conf = conference_dao.get_conference_by_name(conf_name)
+        cur_time = timezone.now()
+        if cur_time > conf.review_submission_deadline:
+            messages.error(
+                request, f"Sorry, review submission deadline has been elapsed")
+            redirect(conf_views.list_conferences)
         if request.method == "POST":
             form = ReviewForm(request.POST)
             if form.is_valid():
@@ -149,6 +164,13 @@ def edit_review(request, conf_name, title):
             messages.error(
                 request, f"Sorry, you are not a reviewer for {title} paper")
             redirect(conf_views.list_conferences)
+        # review submission deadline check
+        conf = conference_dao.get_conference_by_name(conf_name)
+        cur_time = timezone.now()
+        if cur_time > conf.review_submission_deadline:
+            messages.error(
+                request, f"Sorry, review submission deadline has been elapsed")
+            redirect(conf_views.list_conferences)
         review = reviewer_dao.get_review_by_paper_title_and_reviewer(
             title, cur_user_email)
         if request.method == "POST":
@@ -174,7 +196,13 @@ def invite_reviewers(request, conf_name):
             messages.error(
                 request, f"Sorry, you are not a conference admin for {conf_name} conference")
             redirect(conf_views.list_conferences)
+        # invite reviewers deadline check
         conf = conference_dao.get_conference_by_name(conf_name)
+        cur_time = timezone.now()
+        if (cur_time - conf.paper_submission_deadline).days > INVITE_REVIEWERS_DEADLINE:
+            messages.error(
+                request, f"Sorry, invite reviewer deadline has been elapsed")
+            redirect(conf_views.list_conferences)
         if request.method == "POST":
             selected_users_emails = request.POST.getlist('checked_users')
             for selected_user_email in selected_users_emails:
