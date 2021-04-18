@@ -24,7 +24,7 @@ def get_user_existing_submissions(email, conf_name):
 
     submissions = list()
     for submission in submissions_query:
-        print(submission.title, submission.main_author.name, submission.conference.name)
+        # print(submission.title, submission.main_author.name, submission.conference.name)
         submissions.append({
             'title': submission.title,
             'status': "Submitted"

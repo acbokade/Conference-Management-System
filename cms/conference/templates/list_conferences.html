@@ -8,9 +8,10 @@
     {% endfor %}
 </ul>
 {% endif %}
+<h1 style="display: inline-block;">Conferences list</h1>
 
-<h1 class="mt-2">Conferences list</h1>
-<button type="button" class="btn btn-light" style="float: right;"><a href="create_conference">+ Create Conference</a></button>
+<a href="create_conference" class="btn btn-primary" style="float: right;">+ Create Conference</a>
+
 <table class="table">
     <thead class="thead-light">
       <tr>
@@ -37,17 +38,25 @@
                     <td>{{ conf.start_date }}</td>
                     <td>{{ conf.end_date }}</td>
                     <td>{{ conf.location }}</td>
-                    <td><a href="#">{{ conf.url }}</a></td>
+                    <td><a href="{{ conf.url }}">{{ conf.url }}</a></td>
 
                     {% if is_invited_as_rev %}
-                    <td><button onclick="location.href = '/reviewer/{{ conf.name }}/apply_as_a_reviewer';">Apply as Reviewer</button></td>
+                    <td>
+                        <a href="/reviewer/{{ conf.name }}/apply_as_a_reviewer" class="btn btn-success">Apply as Reviewer</a>
+                    </td>
                     {% endif %}
 
                     {% if is_ca_conf %}
+<<<<<<< HEAD
+                    <td>
+                        <a href="/area_chair/{{ conf.name }}/select_area_chair" class="btn btn-warning">Select ACs</a>
+                    </td>
+=======
                     <td><button onclick="location.href = '/area_chair/{{ conf.name }}/select_area_chair';">Select ACs</button></td>
                     <td><button onclick="location.href = '/reviewer/{{ conf.name }}/invite_reviewers';">Invite Reviewers</button></td>
                     <td><button onclick="location.href = '/reviewer/{{ conf.name }}/automated_reviewer_assignment';">Automated Reviewer Assignment</button></td>
                     <td><button onclick="location.href = '/reviewer/{{ conf.name }}/manual_reviewer_assignment';">Manual Reviewer Assignment</button></td>
+>>>>>>> main
                     {% endif %}
                     <!-- <td><button onclick="location.href = '/gsp/{{ conf.name }}/new_submission';">Create Submission</button></td> -->
                 </tr>

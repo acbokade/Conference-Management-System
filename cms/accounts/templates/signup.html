@@ -1,39 +1,57 @@
 {% extends "base_acc.html" %}
 {% block head %}
 {% load static %}
-<link rel="stylesheet" href="{% static '/css/style_signup_login_form.css' %}">
+<link rel="stylesheet" href="{% static '/css/accounts/signup.css' %}">
 {% endblock %}
 
 {% block content %}
-
-{{ user_message }}
-
-<div class="divFormContainer">
-  <div class="divLoginSignup">
-    <form action="signup_process" method="post">
-      {% csrf_token %}
-      <input type="text" placeholder="Email" name="email" required>
-      <br>
-      <input type="password" placeholder="Password" name="password" required>
-      <br>
-      <input type="password" placeholder="Password" name="confirm password" required>
-      <br>
-      <input type="text" placeholder="Full Name" name="name" required>
-      <br>
-      <input type="text" placeholder="Type Security Question" name="security question" required>
-      <br>
-      <input type="text" placeholder="Type Security Answer" name="security answer" required>
-      <br>
-<!--      <input type="radio" name="user_type" value="chair">Chair-->
-<!--      <br>-->
-<!--      <input type="radio" name="user_type" value="reviewer">Reviewer-->
-<!--      <br>-->
-<!--      <input type="radio" name="user_type" value="author">Author-->
-<!--      <br>-->
-      <input type="submit" value="Okay">
-    </form>
-  </div>
+<div class="alert alert-danger" role="alert">
+    {{ user_message }}
 </div>
 
+
+<div class="d-md-flex h-md-100 align-items-center">
+
+  <!-- First Half -->
+  
+  <div class="col-md-6 p-0 bg-indigo h-md-100">
+      <div class="text-white d-md-flex align-items-center h-100 p-5 text-center justify-content-center">
+          <div class="logoarea pt-5 pb-5">
+              <img class="align-self-center mr-3 border border-white kerona-image" src="{% static 'images/Kerona.png' %}" alt="Kerona">
+          </div>
+      </div>
+  </div>
+  
+  <!-- Second Half -->
+  
+  <div class="col-md-6 p-0 bg-white h-md-100 loginarea">
+      <div class="d-md-flex align-items-center h-md-100 p-5 justify-content-center">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title">Sign Up</h5>
+                  <p class="card-text">                
+                    <form action="signup_process" method="post">
+                      {% csrf_token %}
+                      <input type="text" placeholder="Email" name="email" required>
+                      <br>
+                      <input type="password" placeholder="Password" name="password" required>
+                      <br>
+                      <input type="password" placeholder="Password" name="confirm password" required>
+                      <br>
+                      <input type="text" placeholder="Full Name" name="name" required>
+                      <br>
+                      <input type="text" placeholder="Type Security Question" name="security question" required>
+                      <br>
+                      <input type="text" placeholder="Type Security Answer" name="security answer" required>
+                      <br>
+                      <input type="submit" value="Okay">
+                    </form>
+                      
+                  </p>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
 {% endblock %}

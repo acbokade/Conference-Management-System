@@ -1,27 +1,53 @@
 {% extends "base_acc.html" %}
 {% block head %}
 {% load static %}
-<link rel="stylesheet" href="{% static '/css/style_signup_login_form.css' %}">
+<link rel="stylesheet" href="{% static '/css/accounts/login.css' %}">
 {% endblock %}
 
 {% block content %}
 
 {{ user_message }}
 
-<div class="divFormContainer">
-    <div class="divLoginSignup">
-        <form action="login_process" method="post">
-            {% csrf_token %}
-            <input type="text" placeholder="e-mail" name="email">
-            <br>
-            <input type="password" placeholder="password" name="password">
-            <br>
+<div class="d-md-flex h-md-100 align-items-center">
 
-            <input type="submit" value="Log In">
-        </form>
+    <!-- First Half -->
+    
+    <div class="col-md-6 p-0 bg-indigo h-md-100">
+        <div class="text-white d-md-flex align-items-center h-100 p-5 text-center justify-content-center">
+            <div class="logoarea pt-5 pb-5">
+                <img class="align-self-center mr-3 border border-white kerona-image" src="{% static 'images/Kerona.png' %}" alt="Kerona">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Second Half -->
+    
+    <div class="col-md-6 p-0 bg-white h-md-100 loginarea">
+        <div class="d-md-flex align-items-center h-md-100 p-5 justify-content-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Log In</h5>
+                    <p class="card-text">                
+                        <form action="login_process" method="post">
+                            {% csrf_token %}
+                            <input type="text" placeholder="E-mail" name="email">
+                            <br>
+                            <input type="password" placeholder="Password" name="password">
+                            <br>
+
+                            <input type="submit" value="Log In">
+                        </form>
+                        
+                    </p>
+                    <div class="card-footer">
+                        <span class="psw">
+                            <a href="forgot_password">Forgot Password?</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<span class="psw"><a href="forgot_password">Forgot Password?</a></span>
 
 {% endblock %}
