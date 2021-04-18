@@ -16,11 +16,11 @@ class ReviewerForm(forms.ModelForm):
             super(ReviewerForm, self).__init__(*args, **kwargs)
         else:
             subject_areas = kwargs.pop('conf_subject_areas')
-            RESEARCH_EXPERTISE_CHOICES = [
+            SUBJECT_AREA_CHOICES = [
                 (subject_area, subject_area) for subject_area in subject_areas]
             super(ReviewerForm, self).__init__(*args, **kwargs)
-            self.fields['area_expertise'] = forms.ChoiceField(
-                choices=RESEARCH_EXPERTISE_CHOICES)
+            self.fields['subject_areas'] = forms.ChoiceField(
+                choices=SUBJECT_AREA_CHOICES)
 
 
 class ReviewForm(forms.ModelForm):

@@ -1,6 +1,7 @@
 from . import models
 from conference import data_access_layer as conference_dao
 from reviewer.constants import MIN_PAPER_REVIEW_LIMIT
+from accounts import data_access_layer as accounts_dao
 
 
 def get_all_paper_submissions():
@@ -38,12 +39,15 @@ def delete_paper_submission(email, conf_name, paper_title):
 
 def get_paper_submission_email_conf_name(email, conf_name):
 
-    query_set = models.PaperSubmission.objects.get(
-        main_author__email=email,
-        conference__name=conf_name
-    )
+    # query_set = models.PaperSubmission.objects.get(
+    #     main_author__email=email,
+    #     conference__name=conf_name
+    # )
 
-    return query_set
+    # return query_set
+    user = accounts_dao.obtain_user_by_email(email)
+    user_paper_submissions_list = list(user.papersubmission_set.all())
+    return user_paper_submissions_list
 
 
 def get_paper_submission(email, conf_name, paper_title):

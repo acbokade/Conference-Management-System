@@ -74,7 +74,8 @@
         "pk": "paper_2",
         "fields": {
           "conference": "conf_a",
-          "main_author": "b"
+          "main_author": "b",
+          "subject_area": "RNN"
         }
     },
     {
@@ -82,7 +83,8 @@
         "pk": "paper_3",
         "fields": {
           "conference": "conf_a",
-          "main_author": "c"
+          "main_author": "c",
+          "subject_area": "RNN"
         }
     },
     {
@@ -90,7 +92,8 @@
         "pk": "paper_4",
         "fields": {
           "conference": "conf_a",
-          "main_author": "d"
+          "main_author": "d",
+          "subject_area": "RNN"
         }
     },
     {
@@ -98,7 +101,8 @@
         "pk": "paper_5",
         "fields": {
           "conference": "conf_a",
-          "main_author": "a"
+          "main_author": "a",
+          "subject_area": "CNN"
         }
     },
 

@@ -34,16 +34,20 @@ def redirect_assigned_papers(request):
     return redirect('/reviewer/assigned_papers')
 
 
-def render_gsp(request, conf_name=None):
+def render_gsp(request, conf_name):
     is_logged_in = account_utils.check_login(request)
+    if not is_logged_in:
+        return redirect('/accounts/login')
     if request.method == 'POST':
         form = PaperSubmissionForm(request.POST, request.FILES)
         email = request.COOKIES.get('email')
-        
+
         if form.is_valid():
             paper_submission = form.save(commit=False)
-            paper_submission.main_author = accounts_dal.obtain_user_by_email(email)
-            paper_submission.conference = conference_dal.get_conference_by_name(conf_name)
+            paper_submission.main_author = accounts_dal.obtain_user_by_email(
+                email)
+            paper_submission.conference = conference_dal.get_conference_by_name(
+                conf_name)
             # write some sanity checks
 
             paper_submission.save()
@@ -51,9 +55,12 @@ def render_gsp(request, conf_name=None):
             return redirect(f'/gsp/{conf_name}/existing_conf_submissions')
         else:
             paper_submission = form.save(commit=False)
-            paper_submission.main_author = accounts_dal.obtain_user_by_email(email)
-            paper_submission.conference = conference_dal.get_conference_by_name(conf_name)
-            existing_submission = gsp_dal.get_paper_submission(email, conf_name, paper_title)
+            paper_submission.main_author = accounts_dal.obtain_user_by_email(
+                email)
+            paper_submission.conference = conference_dal.get_conference_by_name(
+                conf_name)
+            existing_submission = gsp_dal.get_paper_submission(
+                email, conf_name, paper_title)
             print('existing submissions', existing_submission)
             if existing_submission is None:
                 print('no similar submission found')
@@ -63,8 +70,9 @@ def render_gsp(request, conf_name=None):
                 existing_submission.update(form)
                 return redirect(f'/gsp/{conf_name}/existing_conf_submissions')
             print('form invalid', form.errors)
-
-    if request.method == 'GET':
+    else:
+        conf = conference_dal.get_conference_by_name(conf_name)
+        conf_subject_areas = conf.subject_areas.split(',')
         context_dict = dict()
         context_dict.update({"is_logged_in": is_logged_in})
         conf_status = utils.get_conference_status(request)
@@ -72,7 +80,8 @@ def render_gsp(request, conf_name=None):
         context_dict.update(conf_status)
         user_status.update(user_status)
 
-        context_dict['paper_submission_form'] = PaperSubmissionForm()
+        context_dict['paper_submission_form'] = PaperSubmissionForm(
+            conf_subject_areas=conf_subject_areas)
         context_dict['author_response_submission_form'] = AuthorResponseSubmissionForm()
         context_dict['cam_pos_submission_form'] = CamPosSubmissionForm()
 
@@ -84,7 +93,8 @@ def existing_conf_submissions(request, conf_name):
     if not is_logged_in:
         return redirect(account_views.login)
 
-    context_dict = utils.get_user_existing_submissions(request.COOKIES.get('email'), conf_name)
+    context_dict = utils.get_user_existing_submissions(
+        request.COOKIES.get('email'), conf_name)
     context_dict.update({"is_logged_in": is_logged_in})
     return render(request, "existing_submissions.html", context_dict)
 
@@ -104,20 +114,23 @@ def edit_submission(request, conf_name=None, paper_title=None):
             context_dict.update(conf_status)
             context_dict.update(user_status)
 
-            context_dict['paper_submission_form'] = PaperSubmissionForm(instance=query_set)
+            context_dict['paper_submission_form'] = PaperSubmissionForm(
+                instance=query_set)
 
             return render(request, "gsp.html", context_dict)
         else:
             return redirect(f'/gsp/{{ conf_name }}/existing_conf_submissions')
     elif request.method == 'POST':
         form = PaperSubmissionForm(request.POST, request.FILES)
-        
+
         email = request.COOKIES.get('email')
-        
+
         if form.is_valid():
             paper_submission = form.save(commit=False)
-            paper_submission.main_author = accounts_dal.obtain_user_by_email(email)
-            paper_submission.conference = conference_dal.get_conference_by_name(conf_name)
+            paper_submission.main_author = accounts_dal.obtain_user_by_email(
+                email)
+            paper_submission.conference = conference_dal.get_conference_by_name(
+                conf_name)
             # write some sanity checks
 
             paper_submission.save()
