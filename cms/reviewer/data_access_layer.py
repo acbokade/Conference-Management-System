@@ -23,7 +23,7 @@ def get_reviewer_by_email_and_conf(email, conf_name):
 
 def get_all_reviewers_of_conf(conf_name):
     conf = conference_dao.get_conference_by_name(conf_name)
-    return list(conf.reviwers_set.all())
+    return list(conf.reviewer_set.all())
 
 
 def get_invited_reviewers_emails_of_conf(conf_name):

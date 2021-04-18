@@ -38,6 +38,7 @@
         "model": "conference.Conference",
         "pk": "conf_a",
         "fields": {
+          "ca_emails": "a",
           "start_date": "2021-09-01",
           "paper_submission_deadline": "2021-09-02",
           "review_submission_deadline": "2021-09-03",
@@ -54,6 +55,7 @@
         "model": "conference.Conference",
         "pk": "conf_b",
         "fields": {
+          "ca_emails": "b",
           "start_date": "2021-09-01",
           "paper_submission_deadline": "2021-09-02",
           "review_submission_deadline": "2021-09-03",
@@ -105,6 +107,25 @@
           "subject_area": "CNN"
         }
     },
+    {
+      "model": "gsp.PaperSubmission",
+      "pk": "paper_6",
+      "fields": {
+        "conference": "conf_a",
+        "main_author": "b",
+        "subject_area": "CNN"
+      }
+    },
+    {
+      "model": "gsp.PaperSubmission",
+      "pk": "paper_7",
+      "fields": {
+        "conference": "conf_a",
+        "main_author": "c",
+        "subject_area": "CNN"
+      }
+    },
+
 
 
 
@@ -122,9 +143,18 @@
         "fields": {
           "user": "b",
           "conference": "conf_a",
-          "area_expertise": "RNN",
+          "area_expertise": "CNN",
           "paper_review_limit": "4"
         }
-    }
+    },
+    {
+      "model": "reviewer.Reviewer",
+      "fields": {
+        "user": "c",
+        "conference": "conf_a",
+        "area_expertise": "RNN",
+        "paper_review_limit": "4"
+      }
+  }
 
 ]
