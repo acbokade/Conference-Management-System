@@ -13,4 +13,4 @@ conference/migrations
 gsp/migrations
 reviewer/migrations
 area_chair/migrations
-**/migrations
+**/migrations/**

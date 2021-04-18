@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.utils import timezone
 from accounts import utils
 from datetime import datetime
 from . import models
@@ -10,7 +11,6 @@ from . import data_access_layer as conference_dao
 from accounts import data_access_layer as accounts_dao
 from .forms import ConferenceForm
 from . import utils as conf_utils
-from django.utils import timezone
 from .constants import CONF_UPDATE_DEADLINE
 # from accounts import data_access_layer as accounts_dao
 
@@ -38,7 +38,7 @@ def redirect_assigned_papers(request):
 def list_conferences(request):
     is_logged_in = utils.check_login(request)
     if is_logged_in:
-        confs = conference_dao.get_all_conferences()
+        confs = conference_dao.get_all_valid_conferences()
         is_ca_confs = conf_utils.obtain_ca_boolean_array(
             request.COOKIES.get('email'), confs)
         is_invited_as_revs = conf_utils.obtain_invited_rev_boolean_array(
@@ -118,6 +118,11 @@ def update_conference(request, name):
             redirect(list_conferences)
         if request.method == "POST":
             form = ConferenceForm(request.POST, instance=conf)
+            new_conf_name = request.POST.get('name')
+            # checking if new_conf_name is same as previous one
+            if new_conf_name != conf.name:
+                form.add_error('name', "Conference name can't be changed")
+                return render(request, "update_conference.html", {"is_logged_in": is_logged_in, "form": form})
             if form.is_valid():
                 conference = form.save(commit=True)
                 ca_emails = request.POST.get('ca_emails')

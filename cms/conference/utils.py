@@ -25,7 +25,8 @@ def obtain_invited_rev_boolean_array(user_email, confs_list):
     arr = []
     for conf in confs_list:
         try:
-            reviewer_models.InvitedReviewers.objects.get(user=user_email, conference=conf)
+            reviewer_models.InvitedReviewers.objects.get(
+                user=user_email, conference=conf)
             arr.append(True)
         except:
             arr.append(False)

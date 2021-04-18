@@ -1,8 +1,20 @@
 from . import models
+from django.utils import timezone
 
 
 def get_all_conferences():
     return models.Conference.objects.all()
+
+
+def get_all_valid_conferences():
+    all_confs = models.Conference.objects.all()
+    valid_confs = []
+    cur_time = timezone.now()
+    for conf in all_confs:
+        # checking validity of conf by ca and its active status
+        if cur_time <= conf.end_date and conf.is_valid:
+            valid_confs.append(conf)
+    return valid_confs
 
 
 def get_all_conferences_names():
