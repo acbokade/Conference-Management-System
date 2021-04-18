@@ -10,4 +10,8 @@ urlpatterns = [
     path('<str:conf_name>/select_area_chair', views.select_area_chair,
          name='select_area_chair'),
     path('<str:conf_name>/assign_acs', views.assign_area_chairs),
+    path('<str:conf_name>/make_decision/<str:title>',
+         views.make_ac_decision, name='make_review'),
+    path('<str:conf_name>/edit_decision/<str:title>',
+         views.edit_ac_decision, name='edit_review'),
 ]

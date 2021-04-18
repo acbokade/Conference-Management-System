@@ -7,6 +7,7 @@ from accounts import utils
 from . import data_access_layer as reviewer_dao
 from accounts import data_access_layer as accounts_dao
 from conference import data_access_layer as conference_dao
+from area_chair.models import AssignedAreaChairs, AreaChair
 from gsp import data_access_layer as gsp_dao
 from conference import views as conf_views
 from .utils import assign_reviewers
@@ -80,10 +81,17 @@ def assigned_papers(request):
                 a.paper_submission for a in current_conf_assignment]
             conf_assignments.extend(current_conf_assigned_papers)
 
-        # code for workshop assignments
-        workshop_assignments = []
+        # code for Area Chair assignments
+        current_ac_confs = AreaChair.objects.all().filter(user=request.COOKIES.get('email'))
+        ac_assignments = []
+        for ac in current_ac_confs:
+            ac_current_conf_assignment = AssignedAreaChairs.objects.all().filter(area_chair=ac)
+            ac_current_conf_assigned_papers = [a.paper_submission for a in ac_current_conf_assignment]
+            ac_assignments.extend(ac_current_conf_assigned_papers)
+
         return render(request, "assigned_papers.html", {"is_logged_in": is_logged_in,
-                                                        "conf_assignments": conf_assignments, "workshop_assignments": workshop_assignments})
+                                                        "conf_assignments": conf_assignments,
+                                                        "ac_assignments": ac_assignments})
     return redirect('/accounts/login')
 
 
@@ -124,10 +132,10 @@ def make_review(request, conf_name, title):
             form = ReviewForm(request.POST)
             if form.is_valid():
                 review = form.save(commit=False)
-                review.reviewer = reviewer_dao.get_reviewer_by_email(
-                    request.COOKIES.get('email'))
-                paper_submissions = subject_area_submissions_dict[subject_area] = reviewer_dao.get_reviewer_by_email(
-                    request.COOKIES.get('email'))
+                review.reviewer = reviewer_dao.get_reviewer_by_email_and_conf(
+                    request.COOKIES.get('email'), conf_name)
+                # paper_submissions = subject_area_submissions_dict[subject_area] = reviewer_dao.get_reviewer_by_email(
+                #     request.COOKIES.get('email'))
                 review.paper_submission = gsp_dao.get_paper_submission_by_title(
                     title)
                 review.save()

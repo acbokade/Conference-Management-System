@@ -17,6 +17,8 @@ class ConferenceInfo(models.Model):
     review_submission_deadline = models.DateTimeField(null=True)
     cam_pos_submission_deadline = models.DateTimeField(
         null=True)
+    ac_decision_start_date = models.DateTimeField(null=True)
+    ac_decision_submission_deadline = models.DateTimeField(null=True)
     end_date = models.DateTimeField(null=True)
     logo = models.ImageField(null=True, blank=True, upload_to='images')
     url = models.URLField(null=True, blank=True)
@@ -44,9 +46,17 @@ class ConferenceInfo(models.Model):
             raise ValidationError(('Paper submission deadline %(paper_submission_deadline)s must be before review submission %(review_submission_deadline)s'),
                                   params={'paper_submission_deadline': self.paper_submission_deadline, 'review_submission_deadline': self.review_submission_deadline})
 
-        if self.review_submission_deadline > self.cam_pos_submission_deadline:
-            raise ValidationError(('Review submission deadline %(review_submission_deadline)s must be before Cam Poster submission deadline %(cam_pos_submission_deadline)s'),
-                                  params={'review_submission_deadline': self.review_submission_deadline, 'cam_pos_submission_deadline': self.cam_pos_submission_deadline})
+        if self.review_submission_deadline > self.ac_decision_start_date:
+            raise ValidationError(('Review submission deadline %(review_submission_deadline)s must be before Area Chair Decision start date %(ac_decision_start_date)s'),
+                                  params={'review_submission_deadline': self.review_submission_deadline, 'ac_decision_start_date': self.ac_decision_start_date})
+
+        if self.ac_decision_start_date > self.ac_decision_submission_deadline:
+            raise ValidationError(('Area Chair Decision start date %(ac_decision_start_date)s must be before Area Chair Decision deadline %(ac_decision_submission_deadline)s'),
+                                  params={'ac_decision_start_date': self.ac_decision_start_date, 'ac_decision_submission_deadline': self.ac_decision_submission_deadline})
+
+        if self.ac_decision_submission_deadline > self.cam_pos_submission_deadline:
+            raise ValidationError(('Area Chair Decision deadline %(ac_decision_submission_deadline)s must be before Camera Ready and Poster Submission %(cam_pos_submission_deadline)s'),
+                                  params={'ac_decision_submission_deadline': self.ac_decision_submission_deadline, 'cam_pos_submission_deadline': self.cam_pos_submission_deadline})
 
         if self.cam_pos_submission_deadline > self.end_date:
             raise ValidationError(('Cam Poster deadline %(cam_pos_submission_deadline)s must be before end date %(end_date)s'),

@@ -39,34 +39,34 @@
   </tbody>
 </table>
 
-<h1 class="mt-2">My Submitted Workshops list</h1>
-<button type="button" class="btn btn-light" style="float: right;"><a href="create_workshop">+ Create Workshop</a></button>
-<table class="table">
-  <thead class="thead-light">
-  <tr>
-    <th scope="col">Name</th>
-    <th scope="col">Parent Conference</th>
-    <th scope="col">Start Date</th>
-    <th scope="col">End Date</th>
-    <th scope="col">Location</th>
-    <th scope="col">External URL</th>
-  </tr>
-  </thead>
+<!--<h1 class="mt-2">My Submitted Workshops list</h1>-->
+<!--<button type="button" class="btn btn-light" style="float: right;"><a href="create_workshop">+ Create Workshop</a></button>-->
+<!--<table class="table">-->
+<!--  <thead class="thead-light">-->
+<!--  <tr>-->
+<!--    <th scope="col">Name</th>-->
+<!--    <th scope="col">Parent Conference</th>-->
+<!--    <th scope="col">Start Date</th>-->
+<!--    <th scope="col">End Date</th>-->
+<!--    <th scope="col">Location</th>-->
+<!--    <th scope="col">External URL</th>-->
+<!--  </tr>-->
+<!--  </thead>-->
 
-  <tbody>
-  {% for workshop in workshops %}
-  {% if workshop.is_valid %}
-  <tr>
-    <td><a href="#">{{ workshop.name }}</td>
-    <td><a href="#">{{ workshop.parent_conference_name }}</td>
-    <td>{{ workshop.start_date }}</td>
-    <td>{{ workshop.end_date }}</td>
-    <td>{{ workshop.location }}</td>
-    <td><a href="#">{{ workshop.url }}</td>
-  </tr>
-  {% endif %}
-  {% endfor %}
-  </tbody>
-</table>
+<!--  <tbody>-->
+<!--  {% for workshop in workshops %}-->
+<!--  {% if workshop.is_valid %}-->
+<!--  <tr>-->
+<!--    <td><a href="#">{{ workshop.name }}</td>-->
+<!--    <td><a href="#">{{ workshop.parent_conference_name }}</td>-->
+<!--    <td>{{ workshop.start_date }}</td>-->
+<!--    <td>{{ workshop.end_date }}</td>-->
+<!--    <td>{{ workshop.location }}</td>-->
+<!--    <td><a href="#">{{ workshop.url }}</td>-->
+<!--  </tr>-->
+<!--  {% endif %}-->
+<!--  {% endfor %}-->
+<!--  </tbody>-->
+<!--</table>-->
 
 {% endblock %}
