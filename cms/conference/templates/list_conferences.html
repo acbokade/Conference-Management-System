@@ -4,10 +4,11 @@
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}
+
 <h1 class="mt-2">Conferences list</h1>
 <button type="button" class="btn btn-light" style="float: right;"><a href="create_conference">+ Create Conference</a></button>
 <table class="table">
@@ -19,6 +20,9 @@
         <th scope="col">End Date</th>
         <th scope="col">Location</th>
         <th scope="col">External URL</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -41,6 +45,9 @@
 
                     {% if is_ca_conf %}
                     <td><button onclick="location.href = '/area_chair/{{ conf.name }}/select_area_chair';">Select ACs</button></td>
+                    <td><button onclick="location.href = '/reviewer/{{ conf.name }}/invite_reviewers';">Invite Reviewers</button></td>
+                    <td><button onclick="location.href = '/reviewer/{{ conf.name }}/automated_reviewer_assignment';">Automated Reviewer Assignment</button></td>
+                    <td><button onclick="location.href = '/reviewer/{{ conf.name }}/manual_reviewer_assignment';">Manual Reviewer Assignment</button></td>
                     {% endif %}
                     <!-- <td><button onclick="location.href = '/gsp/{{ conf.name }}/new_submission';">Create Submission</button></td> -->
                 </tr>
