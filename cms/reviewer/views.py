@@ -249,7 +249,8 @@ def automated_reviewer_assignment(request, conf_name):
             paper_submissions_list = gsp_dao.get_all_paper_submissions_of_conf(
                 conf_name)
 
-            conf_subject_areas = conference_dao.get_conference_subject_areas()
+            conf_subject_areas = conference_dao.get_conference_subject_areas(
+                conf_name)
 
             subject_area_reviewer_dict = {}
             for reviewer in reviewers_list:
@@ -270,7 +271,9 @@ def automated_reviewer_assignment(request, conf_name):
                         paper_submission)
 
             # reviewer assignment done for each subject area independently
+            print(conf_subject_areas)
             for subject_area in conf_subject_areas:
+                print(subject_area)
                 reviewers = subject_area_reviewer_dict[subject_area]
                 paper_submissions = subject_area_submissions_dict[subject_area]
                 paper_reviewer_mapping = assign_reviewers(
@@ -278,10 +281,11 @@ def automated_reviewer_assignment(request, conf_name):
 
                 for paper_submission in paper_reviewer_mapping.keys():
                     assigned_reviewers = paper_reviewer_mapping[paper_submission]
-                    for assigned_reviewer in assign_reviewers:
+                    for assigned_reviewer in assigned_reviewers:
                         assigned_reviewer_obj = AssignedReviewers.objects.create(
                             reviewer=assigned_reviewer, paper_submission=paper_submission)
                         assigned_reviewer_obj.save()
+            return
             messages.info(
                 request, f"Automated reviewer assignment succesfully completed for {conf_name} conference")
             redirect(conf_views.list_conferences)

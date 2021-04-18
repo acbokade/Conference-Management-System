@@ -18,11 +18,11 @@ class PaperSubmissionForm(forms.ModelForm):
             super(PaperSubmissionForm, self).__init__(*args, **kwargs)
         else:
             subject_areas = kwargs.pop('conf_subject_areas')
-            RESEARCH_EXPERTISE_CHOICES = [
+            SUBJECT_AREAS_CHOICES = [
                 (subject_area, subject_area) for subject_area in subject_areas]
             super(PaperSubmissionForm, self).__init__(*args, **kwargs)
             self.fields['subject_area'] = forms.ChoiceField(
-                choices=RESEARCH_EXPERTISE_CHOICES)
+                choices=SUBJECT_AREAS_CHOICES)
 
 
 class AuthorResponseSubmissionForm(forms.ModelForm):
