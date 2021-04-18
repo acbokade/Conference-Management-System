@@ -8,6 +8,7 @@ from reviewer.models import Reviewer
 from accounts import utils
 from accounts import data_access_layer as accounts_dao
 from .models import AreaChair
+import area_chair_assignment
 
 
 def redirect_signup(request):
@@ -62,3 +63,7 @@ def select_area_chair(request, conf_name):
         return render(request, "select_area_chair.html",
                       {"in_logged_in": is_logged_in, "area_expertise_reviwer_dict": area_expertise_reviwer_dict})
     return redirect('/accounts/login')
+
+def assign_area_chairs(request, conf_name=None):
+
+    return area_chair_assignment.assign_area_chairs(conf_name)
