@@ -10,8 +10,8 @@ class Reviewer(models.Model):
         User, on_delete=models.CASCADE)
     conference = models.ForeignKey(
         Conference, on_delete=models.CASCADE)
-    prior_reviewing_experience = models.CharField(max_length=250)
-    prior_research_paper_submissions = models.PositiveIntegerField()
+    prior_reviewing_experience = models.CharField(max_length=250, blank=True)
+    prior_research_paper_submissions = models.PositiveIntegerField(default=0)
     area_expertise = models.CharField(max_length=250)
     paper_review_limit = models.PositiveIntegerField(
         validators=[MinValueValidator(3)])

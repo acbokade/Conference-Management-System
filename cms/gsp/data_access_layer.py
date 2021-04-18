@@ -1,5 +1,6 @@
 from . import models
 from conference import data_access_layer as conference_dao
+from reviewer.constants import MIN_PAPER_REVIEW_LIMIT
 
 
 def get_all_paper_submissions():
@@ -56,3 +57,11 @@ def get_paper_submission(email, conf_name, paper_title):
         return query_set
     except models.PaperSubmission.DoesNotExist:
         return None
+
+
+def get_unassigned_papers(conf_name):
+    all_papers = get_all_paper_submissions_of_conf(conf_name)
+    unassigned_papers = []
+    for paper in all_papers:
+        if len(paper.assignedreviewers_set.all()) != MIN_PAPER_REVIEW_LIMIT:
+            unassigned_papers
