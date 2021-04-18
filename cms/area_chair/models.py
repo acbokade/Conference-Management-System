@@ -14,3 +14,14 @@ class AssignedAreaChairs(models.Model):
     area_chair = models.ForeignKey(AreaChair, on_delete=models.CASCADE)
     paper_submission = models.ForeignKey(
         PaperSubmission, on_delete=models.CASCADE)
+
+
+class AreaChairDecision(models.Model):
+    paper_submission = models.ForeignKey(
+        PaperSubmission, on_delete=models.CASCADE)
+    area_chair = models.ForeignKey(AreaChair, on_delete=models.CASCADE)
+    meta_review = models.TextField(blank=True)
+    decision = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.paper_submission.title

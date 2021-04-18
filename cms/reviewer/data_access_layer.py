@@ -16,6 +16,11 @@ def get_reviewer_by_email(email):
     return reviewer
 
 
+def get_reviewer_by_email_and_conf(email, conf_name):
+    reviewer = Reviewer.objects.filter(user=email, conference=conf_name)[0]
+    return reviewer
+
+
 def get_all_reviewers_of_conf(conf_name):
     conf = conference_dao.get_conference_by_name(conf_name)
     return list(conf.reviwers_set.all())
