@@ -11,7 +11,7 @@
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           {{ paper_submission_form|crispy }}
-          <button type="submit" class="btn btn-success">Submit</button>
+          <button type="submit" class="btn btn-success">Submit paper</button>
         </form>
       {% else %}
         <h3>Title:</h3>
@@ -31,7 +31,7 @@
       {% if author_response_submission_active %}
         <form method="post" enctype="multipart/form-data">
           {{ author_response_submission_form|crispy }}
-          <button type="submit" class="btn btn-success">Create conference</button>
+          <button type="submit" class="btn btn-success">Submit review</button>
         </form>
       {% else %}
         Your reviews. 
@@ -45,7 +45,7 @@
       {% if cam_pos_submission_active %}
         <form method="post" enctype="multipart/form-data">
           {{ cam_pos_submission_form|crispy }}
-          <button type="submit" class="btn btn-success">Create conference</button>
+          <button type="submit" class="btn btn-success">Submit Cam-Pos</button>
         </form>
       {% else %}
         Your Cam-Pos Submission.
