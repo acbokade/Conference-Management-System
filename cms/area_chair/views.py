@@ -14,6 +14,7 @@ from . import data_access_layer as area_chair_dao
 from gsp import data_access_layer as gsp_dao
 from . import area_chair_assignment
 
+
 def redirect_signup(request):
     return redirect('/accounts/signup')
 
@@ -67,11 +68,11 @@ def select_area_chair(request, conf_name):
                       {"in_logged_in": is_logged_in, "area_expertise_reviwer_dict": area_expertise_reviwer_dict})
     return redirect('/accounts/login')
 
-<<<<<<< HEAD
+
 def assign_area_chairs(request, conf_name=None):
 
     return area_chair_assignment.assign_area_chairs(conf_name)
-=======
+
 
 def make_ac_decision(request, conf_name, title):
     is_logged_in = utils.check_login(request)
@@ -94,7 +95,7 @@ def make_ac_decision(request, conf_name, title):
             redirect(conf_views.list_conferences)
         try:
             assigned_ac_found = AssignedAreaChairs.objects.find(area_chair=area_chair,
-                                                                     paper_submission=paper_submission)
+                                                                paper_submission=paper_submission)
         except:
             messages.error(
                 request, f"Sorry, you are not an Area Chair for {title} paper")
@@ -186,4 +187,3 @@ def edit_ac_decision(request, conf_name, title):
             form = AreaChairDecisionForm(instance=ac_decision)
         return render(request, "edit_ac_decision.html", {"is_logged_in": is_logged_in, "form": form})
     return redirect('/accounts/login')
->>>>>>> main
