@@ -82,11 +82,13 @@ def assigned_papers(request):
             conf_assignments.extend(current_conf_assigned_papers)
 
         # code for Area Chair assignments
-        current_ac_confs = AreaChair.objects.all().filter(user=request.COOKIES.get('email'))
+        current_ac_confs = AreaChair.objects.all().filter(
+            user=request.COOKIES.get('email'))
         ac_assignments = []
         for ac in current_ac_confs:
             ac_current_conf_assignment = AssignedAreaChairs.objects.all().filter(area_chair=ac)
-            ac_current_conf_assigned_papers = [a.paper_submission for a in ac_current_conf_assignment]
+            ac_current_conf_assigned_papers = [
+                a.paper_submission for a in ac_current_conf_assignment]
             ac_assignments.extend(ac_current_conf_assigned_papers)
 
         return render(request, "assigned_papers.html", {"is_logged_in": is_logged_in,
@@ -301,5 +303,12 @@ def manual_reviewer_assignment(request, conf_name):
         if request.method == "POST":
             pass
         else:
-            pass
+            all_reviewers = reviewer_dao.get_all_reviewers_of_conf(conf_name)
+            all_paper_submissions = gsp_dao.get_all_paper_submissions_of_conf(
+                conf_name)
+            context = {
+                "all_reviewers": all_reviewers,
+                "all_paper_submissions": all_paper_submissions,
+            }
+            return render(request, "manual_reviewer_assignment.html", context)
     return redirect('/accounts/login')

@@ -12,6 +12,7 @@ class ConferenceSubmission(models.Model):
     main_author = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=False
     )
+    subject_area = models.CharField(max_length=250)
 
     class Meta:
         abstract = True
@@ -21,7 +22,7 @@ class PaperSubmission(ConferenceSubmission):
 
     abstract = models.TextField(blank=False)
     pdf_paper = models.FileField(
-        upload_to='tmp/cms-project/main_paper', blank=False)
+        upload_to='tmp/cms-project/main_paper', blank=False, null=True)
     supplementary_material = models.FileField(
         upload_to='tmp/cms-project/supplementary', null=True, blank=True, default=None)
     author_list = models.TextField(blank=False)
