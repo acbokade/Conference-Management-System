@@ -8,7 +8,7 @@ from reviewer.models import Reviewer
 from accounts import utils
 from accounts import data_access_layer as accounts_dao
 from .models import AreaChair
-import area_chair_assignment
+from . import area_chair_assignment
 
 
 def redirect_signup(request):

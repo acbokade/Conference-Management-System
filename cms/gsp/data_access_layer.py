@@ -37,7 +37,7 @@ def delete_paper_submission(email, conf_name, paper_title):
 
 def get_paper_submission_email_conf_name(email, conf_name):
 
-    query_set = models.PaperSubmission.objects.filter(
+    query_set = models.PaperSubmission.objects.get(
         main_author__email=email,
         conference__name=conf_name
     )
