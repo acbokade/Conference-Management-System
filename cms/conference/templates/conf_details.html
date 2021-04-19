@@ -3,10 +3,9 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    
-<!--<button onclick="location.href = '';">Home</button></td>-->
 
-{% if conference_found %}
+<div class="container">
+    {% if conference_found %}
     <div class="jumbotron">
         <h1 class="display-4">Conference</h1>
         <h1 class="display-4">{{ name }}</h1>
@@ -45,7 +44,9 @@
         </div>
     </div>
 
-{% else %}
-    <h1>Conference {{ name }} not found</h1>
-{% endif %}
+    {% else %}
+        <h1>Conference {{ name }} not found</h1>
+    {% endif %}
+</div>
+
 {% endblock %}

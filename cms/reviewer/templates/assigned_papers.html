@@ -4,65 +4,49 @@
 
 {% block content %}
 
-<!--<h1 class="mt-2">{{ conf_name }}</h1>-->
-
-<!--<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/conference/details/{{ conf_name }}'">Click here to view conference details</button>-->
-
-<!--<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/gsp/{{ conf_name }}/new_submission';">New Submission +</button>-->
-
 <h1>Sanity check Assignment Code in reviewer.views.py line 52</h1>
 
-<h1>Papaers for Reviewing</h1>
-<table class="table">
-    <thead class="thead-light">
-    <tr>
-        <th scope="col">Paper Title</th>
-        <th scope="col">Conference Name</th>
-        <th scope="col" colspan="2" style="text-align:center;">Action</th>
-    </tr>
-    </thead>
+<div class="container">
+    <div class="card">
+        <h5 class="card-header text-white bg-primary">Papers for Reviewing</h5>
+        <div class="card-body text-black bg-light">
+            {% if conf_assignments %}
+                {% for assignment in conf_assignments %}
+                <div class="card">
+                    <div class="card-body" style="width: 25rem;">
+                        <h5 class="card-title">{{ assignment.title }}</h5>
+                        <p class="card-text">{{ assignment.conference.name }}</p>
+                        <a href="/reviewer/{{ assignment.conference.name }}/make_review/{{ assignment.title }}" class="btn btn-warning">Make Review</a>
+                        <a href="/reviewer/{{ assignment.conference.name }}/edit_review/{{ assignment.title }}" class="btn btn-warning">Edit Review</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <h4>No reviews assigned.</h4>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-white"></div>
+    </div>
 
-    <tbody>
-    {% for assignment in conf_assignments %}
-    {% comment %}
-    see https://stackoverflow.com/questions/48438575/call-django-on-html-button-click/48438962
-    {% endcomment %}
-    <tr>
-        <td>{{ assignment.title }}</td>
-        <td>{{ assignment.conference.name }}</td>
-        <td><button type="button" class="btn btn-warning"><a href="/reviewer/{{ assignment.conference.name }}/make_review/{{ assignment.title }}" style="color:white;">Make Review</a></button></td>
-        <td><button type="button" class="btn warning"><a href="/reviewer/{{ assignment.conference.name }}/edit_review/{{ assignment.title }}" style="color:white;">Edit Review</a></button></td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
-<br>
-<br>
-
-<h1>Papaers for Final Area Chair Decision</h1>
-<table class="table">
-    <thead class="thead-light">
-    <tr>
-        <th scope="col">Paper Title</th>
-        <th scope="col">Conference Name</th>
-        <th scope="col" colspan="2" style="text-align:center;">Action</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    {% for assignment in ac_assignments %}
-    {% comment %}
-    see https://stackoverflow.com/questions/48438575/call-django-on-html-button-click/48438962
-    {% endcomment %}
-    <tr>
-        <td>{{ assignment.title }}</td>
-        <td>{{ assignment.conference.name }}</td>
-        <td><button type="button" class="btn btn-warning"><a href="/area_chair/{{ assignment.conference.name }}/make_decision/{{ assignment.title }}" style="color:white;">Make Decision</a></button></td>
-        <td><button type="button" class="btn warning"><a href="/area_chair/{{ assignment.conference.name }}/edit_decision/{{ assignment.title }}" style="color:white;">Edit Decision</a></button></td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <div class="card">
+        <h5 class="card-header text-white bg-primary">Papers for Final Area Chair Decision</h5>
+        <div class="card-body text-black bg-light">
+            {% if ac_assignment %}
+                {% for assignment in ac_assignment %}
+                <div class="card">
+                    <div class="card-body" style="width: 25rem;">
+                        <h5 class="card-title">{{ assignment.title }}</h5>
+                        <p class="card-text">{{ assignment.conference.name }}</p>
+                        <a href="/area_chair/{{ assignment.conference.name }}/make)_decision/{{ assignment.title }}" class="btn btn-warning">Make Decision</a>
+                        <a href="/area_chair/{{ assignment.conference.name }}/edit_decision/{{ assignment.title }}" class="btn btn-warning">Edit Decision</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <h4>No Acc-Rej decision assigned.</h4>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
 {% endblock %}

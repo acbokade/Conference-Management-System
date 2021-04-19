@@ -3,9 +3,11 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<div class="container">
   <h1 class="mt-2">Automated reviewer assignment</h1>
   <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-success">Initiate automated reviewer assignment process</button>
   </form>
+</div>
 {% endblock %}

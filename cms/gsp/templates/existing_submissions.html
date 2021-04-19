@@ -5,11 +5,11 @@
 {% block content %}
 <h1 class="mt-2">{{ conf_name }}</h1>
 
-<a href="/conference/details/{{ conf_name }}" class="btn btn-outline-secondary">Click here to View Conference Details</a>
+<a href="/conference/details/{{ conf_name }}" class="btn btn-outline-secondary">Conference Details</a>
 {% if has_edit_conf_rights %}
     <a href="/conference/update_conference/{{ conf_name }}" class="btn btn-outline-secondary">Update Conference</a>
 {% endif %}
-<a href="/gsp/{{ conf_name }}/new_submission" class="btn btn-outline-secondary">+ New Submission</a>
+<a href="/gsp/{{ conf_name }}/new_submission" class="btn btn-outline-secondary" style="float: right;">+ New Submission</a>
 <table class="table">
     <thead class="thead-light">
         <tr>

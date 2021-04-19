@@ -41,13 +41,13 @@ def apply_as_a_reviewer(request, conf_name):
         if cur_user_email not in invited_reviewers_emails:
             messages.error(
                 request, f"Sorry, you are not invited reviewer for this conference")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         # reviewer application deadline check
         cur_time = timezone.now()
         if (cur_time - conf.paper_submission_deadline).days > REVIEWER_APPLICATION_DEADLINE:
             messages.error(
                 request, f"Sorry, Reviewer application deadline has been elapsed")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         if request.method == "POST":
             form = ReviewerForm(request.POST)
             if form.is_valid():
@@ -108,28 +108,28 @@ def make_review(request, conf_name, title):
         except:
             messages.error(
                 request, f"Sorry, you are not a reviewer for {conf_name} conference")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         try:
             paper_submission = gsp_dao.get_paper_submission_by_title(
                 title)
         except:
             messages.error(
                 request, f"Paper {title} doesn't exist")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         try:
             assigned_reviewer_found = AssignedReviewers.objects.find(reviewer=reviewer,
                                                                      paper_submission=paper_submission)
         except:
             messages.error(
                 request, f"Sorry, you are not a reviewer for {title} paper")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         # review submission deadline check
         conf = conference_dao.get_conference_by_name(conf_name)
         cur_time = timezone.now()
         if cur_time > conf.review_submission_deadline:
             messages.error(
                 request, f"Sorry, review submission deadline has been elapsed")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         if request.method == "POST":
             form = ReviewForm(request.POST)
             if form.is_valid():
@@ -243,7 +243,7 @@ def automated_reviewer_assignment(request, conf_name):
         if cur_user_email not in conf_ca_emails:
             messages.error(
                 request, f"Sorry, you are not a conference admin for {conf_name} conference")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         if request.method == "POST":
             reviewers_list = reviewer_dao.get_all_reviewers_of_conf(conf_name)
             paper_submissions_list = gsp_dao.get_all_paper_submissions_of_conf(
@@ -285,12 +285,12 @@ def automated_reviewer_assignment(request, conf_name):
                         assigned_reviewer_obj = AssignedReviewers.objects.create(
                             reviewer=assigned_reviewer, paper_submission=paper_submission)
                         assigned_reviewer_obj.save()
-            return
+            
             messages.info(
                 request, f"Automated reviewer assignment succesfully completed for {conf_name} conference")
-            redirect(conf_views.list_conferences)
+            return redirect(conf_views.list_conferences)
         else:
-            return render(request, "automated_reviewer_assignment.html")
+            return render(request, "automated_reviewer_assignment.html", {'is_logged_in': is_logged_in})
     return redirect('/accounts/login')
 
 
