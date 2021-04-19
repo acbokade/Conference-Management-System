@@ -5,18 +5,17 @@
 {% block content %}
 <h1 class="mt-2">{{ conf_name }}</h1>
 
-<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/conference/details/{{ conf_name }}'">Click here to view conference details</button>
-
-<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/conference/update_conference/{{ conf_name }}';">Update conference</button>
-
-<button type="submit" class="btn btn-outline-secondary" button onclick="location.href = '/gsp/{{ conf_name }}/new_submission';">New Submission +</button>
-
+<a href="/conference/details/{{ conf_name }}" class="btn btn-outline-secondary">Click here to View Conference Details</a>
+{% if has_edit_conf_rights %}
+    <a href="/conference/update_conference/{{ conf_name }}" class="btn btn-outline-secondary">Update Conference</a>
+{% endif %}
+<a href="/gsp/{{ conf_name }}/new_submission" class="btn btn-outline-secondary">+ New Submission</a>
 <table class="table">
     <thead class="thead-light">
         <tr>
             <th scope="col">Title</th>
             <th scope="col">Status</th>
-            <th scope="col" colspan="2" style="text-align:center;">Action</th>
+            <th scope="col">Action</th>
         </tr>    
     </thead>
 
@@ -28,8 +27,17 @@
             <tr>
                 <td>{{ submission.title }}</td>
                 <td>{{ submission.status }}</td>
-                <td><button type="button" class="btn btn-warning"><a href="/gsp/{{ conf_name }}/{{ submission.title }}/edit" style="color:white;">Edit</a></button></td>
-                <td><button type="button" class="btn btn-danger"><a href="/gsp/{{ conf_name }}/{{ submission.title }}/withdraw" style="color:white;">Withdraw</a></button></td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Take Action
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/gsp/{{ conf_name }}/{{ submission.title }}/edit" class="dropdown-item">Edit</a>
+                            <a href="/gsp/{{ conf_name }}/{{ submission.title }}/withdraw" class="dropdown-item">Withdraw</a>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
     </tbody>

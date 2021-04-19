@@ -9,8 +9,8 @@ from . import data_access_layer as gsp_dal
 from conference import views as conference_views
 from .models import PaperSubmission, AuthorResponseSubmission, CamPosSubmission
 from .forms import PaperSubmissionForm, AuthorResponseSubmissionForm, CamPosSubmissionForm
+from django.contrib import messages
 from . import utils
-
 
 # Create your views here.
 
@@ -92,10 +92,11 @@ def existing_conf_submissions(request, conf_name):
     is_logged_in = account_utils.check_login(request)
     if not is_logged_in:
         return redirect(account_views.login)
-
+    has_edit_conf_rights = utils.check_has_edit_conf_rights(conf_name, request.COOKIES.get('email'))
     context_dict = utils.get_user_existing_submissions(
         request.COOKIES.get('email'), conf_name)
     context_dict.update({"is_logged_in": is_logged_in})
+    context_dict['has_edit_conf_rights'] = has_edit_conf_rights
     return render(request, "existing_submissions.html", context_dict)
 
 

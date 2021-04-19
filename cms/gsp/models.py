@@ -8,7 +8,7 @@ class ConferenceSubmission(models.Model):
     conference = models.ForeignKey(
         Conference, on_delete=models.CASCADE, null=True, blank=False
     )
-    title = models.CharField(primary_key=True, max_length=50, blank=True)
+    title = models.CharField(primary_key=True, max_length=50, blank=False, default='')
     main_author = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=False
     )
@@ -24,14 +24,16 @@ class PaperSubmission(ConferenceSubmission):
         upload_to='tmp/cms-project/main_paper', blank=False, null=True)
     supplementary_material = models.FileField(
         upload_to='tmp/cms-project/supplementary', null=True, blank=True, default=None)
-    author_list = models.TextField(blank=False)
+    other_authors_emails = models.TextField(blank=True)
+    
     subject_area = models.CharField(max_length=250)
+    authors = models.ManyToManyField(User, related_name='authors')
 
     def __str__(self):
         return self.title
 
 
-class AuthorResponseSubmission(ConferenceSubmission):
+class AuthorResponseSubmission(models.Model):
     response_pdf = models.FileField(
         upload_to='tmp/cms-project/responses', blank=True, null=True)
     paper_submission_ref = models.ForeignKey(
@@ -39,7 +41,7 @@ class AuthorResponseSubmission(ConferenceSubmission):
     )
 
 
-class CamPosSubmission(ConferenceSubmission):
+class CamPosSubmission(models.Model):
     camera_ready_pdf = models.FileField(
         upload_to='tmp/cms-project/camera', blank=False)
     poster_pdf = models.FileField(

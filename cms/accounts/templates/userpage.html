@@ -2,38 +2,48 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6">
+{% load static %}
+<div class="d-md-flex h-md-100 align-items-center">
+
+    <!-- First Half -->
+    
+    <div class="col-md-6 p-0 bg-indigo h-md-100">
+        <div class="text-white d-md-flex align-items-center h-100 p-5 text-center justify-content-center">
+            <div class="logoarea pt-5 pb-5">
+                <img class="align-self-center mr-3 border border-white kerona-image" src="{% static 'images/Kerona.png' %}" alt="Kerona">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Second Half -->
+    
+    <div class="col-md-6 p-0 bg-white h-md-100 loginarea">
+        <div class="d-md-flex align-items-center h-md-100 p-5 justify-content-center">
+
             <div class="card" style="width: 30rem;">
                 <div class="card-body">
                   <h5 class="card-title">All Conferences</h5>
                   <p class="card-text">View all te running Conferences. Checkout their Subjects and Important Dates.</p>
-                  <a href="conferences" class="card-link">All Conference</a>
+                  <a href="conferences" class="card-link">All Conferences</a>
                 </div>
-            </div>            
-        </div>
+            </div>     
 
-
-        <div class="col-sm-6">
             <div class="card" style="width: 30rem;">
                 <div class="card-body">
                     <h5 class="card-title">My Conferences</h5>
                     <p class="card-text">View the Conferences related to you, where you may be a Submitter, Reviewer, Area Chair or Conference Admin.</p>
-                    <a href="#" class="card-link">My Conferences</a>
+                    <a href="my_conferences" class="card-link">My Conferences</a>
                 </div>
-            </div>            
-        </div>
-        
-        
-        <div class="col-sm-6">
+            </div>         
+
             <div class="card" style="width: 30rem;">
                 <div class="card-body">
                     <h5 class="card-title">Profile</h5>
                     <p class="card-text">View your Profile. Update your profile regularly to get more reviewer invitations.</p>
-                    <a href="#" class="card-link">My Profile</a>
+                    <a href="profile" class="card-link">My Profile</a>
                 </div>
-            </div>            
+            </div>      
+
         </div>
     </div>
 </div>

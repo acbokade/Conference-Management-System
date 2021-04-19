@@ -84,11 +84,13 @@ def create_conference(request):
                 ca_emails = ca_emails.split()
                 for ca_email in ca_emails:
                     try:
+                        ca_email = ca_email.strip()
                         other_ca = accounts_dao.obtain_user_by_email(ca_email)
                         conference.ca.add(other_ca)
                     except accounts_models.User.DoesNotExist:
                         # TODO: handle this event by sending email to creator indicating that the email doesnt exist
-                        pass
+                        print('email not found in database', ca_email)
+                conference.save()
                 messages.success(request, 'Conference succesfully created')
                 return redirect(list_conferences)
             return render(request, "create_conference.html", {"form": form})

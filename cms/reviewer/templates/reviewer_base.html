@@ -2,43 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style_general.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style_upper_menu.css' %}">
+    <link rel="icon" type="image/ico" href="{% static '/images/favicon.ico' %}">
     <title>Reviewer</title>
   </head>
   <body>
 
-  <div id="divMenuContainer">
+    <ul class="nav justify-content-end border-bottom border-info">
+        <li class="nav-item">
+            <a href="/accounts/userpage" class="nav-link active">Home</a>
+        </li>
 
-    <a href="/reviewer/redirect_userpage">Home</a>
+        {% if is_logged_in == False %}
+        <li class="nav-item">
+            <a href="/accounts/login" class="nav-link">Log In</a>
+        </li>
+        {% endif %}
 
-    {% if is_logged_in == False %}
-    <a href="/reviewer/redirect_login">Log In</a>
-    {% endif %}
+        {% if is_logged_in == False %}
+        <li class="nav-item">
+            <a href="/accounts/signup" class="nav-link">Sign Up</a>
+        </li>
+        {% endif %}
 
-    {% if is_logged_in == False %}
-    <a href="/reviewer/redirect_signup">Sign Up</a>
-    {% endif %}
+        {% if is_logged_in == True %}
+        <li class="nav-item">
+            <a href="/accounts/logout" class="nav-link">Log Out</a>
+        </li>
+        {% endif %}
 
-    {% if is_logged_in == True %}
-    <a href="/reviewer/redirect_logout">Log Out</a>
-    {% endif %}
+        {% if is_logged_in == True %}
+        <li class="nav-item">
+            <a href="/accounts/assigned_papers" class="nav-link">Assigned Papers</a>
+        </li>
+        {% endif %}
 
-    {% if is_logged_in == True %}
-    <a href="/reviewer/assigned_papers">Assigned Papers</a>
-    {% endif %}
+    </ul>
 
-  </div>
+  {% block content %}
+  {% endblock %}
 
-  <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-8">
-          <h1 class="mt-2"></h1>
-          <hr class="mt-0 mb-4">
-          {% block content %}
-          {% endblock %}
-        </div>
-      </div>
-    </div>
   </body>
 </html>

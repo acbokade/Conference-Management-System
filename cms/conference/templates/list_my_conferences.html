@@ -8,65 +8,63 @@
   {% endfor %}
 </ul>
 {% endif %}
-<h1 class="mt-2">My Submitted Conferences list</h1>
-<button type="button" class="btn btn-light" style="float: right;"><a href="create_conference">+ Create Conference</a></button>
+<h1 style="display: inline;">My Submitted Conferences list</h1>
+
+<a href="create_conference" class="btn btn-primary" style="float: right;">+ Create Conference</a>
+
 <table class="table">
   <thead class="thead-light">
-  <tr>
-    <th scope="col">Name</th>
-    <th scope="col">Start Date</th>
-    <th scope="col">End Date</th>
-    <th scope="col">Location</th>
-    <th scope="col">External URL</th>
+    <tr>
+      <th scope="col">Logo</th>
+      <th scope="col">Name</th>
+      <th scope="col">Start Date</th>
+      <th scope="col">End Date</th>
+      <th scope="col">Location</th>
+      <th scope="col">External URL</th>
+      <th scope="col">Actions</th>
 
-  </tr>
+    </tr>
   </thead>
 
   <tbody>
-  {% for conf in confs %}
-  {% if conf.is_valid %}
-  <tr>
-    <td><a href="/gsp/{{ conf.name }}/existing_conf_submissions">{{ conf.name }}</td>
-    <td>{{ conf.start_date }}</td>
-    <td>{{ conf.end_date }}</td>
-    <td>{{ conf.location }}</td>
-    <td><a href="#">{{ conf.url }}</a></td>
-<!--    <td><button onclick="location.href = '/reviewer/{{ conf.name }}/apply_as_a_reviewer';">Apply</button></td>-->
-    <!-- <td><button onclick="location.href = '/gsp/{{ conf.name }}/new_submission';">Create Submission</button></td> -->
-  </tr>
-  {% endif %}
-  {% endfor %}
+    {% for conf in confs %}
+      {% if conf.is_valid %}
+      <tr>
+        <td><img src="{{ conf.logo_url }}" alt=" " width="65" height="65"></td>
+        <td><a href="/gsp/{{ conf.name }}/existing_conf_submissions">{{ conf.name }}</td>
+        <td>{{ conf.start_date }}</td>
+        <td>{{ conf.end_date }}</td>
+        <td>{{ conf.location }}</td>
+        <td><a href="{{ conf.url }}">{{ conf.url }}</a></td>
+        <td>
+          {% if is_invited_as_rev or is_ca_conf %}
+          <div class="btn-group">
+              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Take Action
+              </button>
+              <div class="dropdown-menu">
+                  {% if is_invited_as_rev %}
+                      <a href="/reviewer/{{ conf.name }}/apply_as_a_reviewer" class="dropdown-item">Apply as Reviewer</a>
+                      <div class="dropdown-divider"></div>
+                  {% endif %}
+
+                  {% if is_ca_conf %}
+                      <a class="dropdown-item" href="/area_chair/{{ conf.name }}/select_area_chair">Select ACs</a>
+                      <a class="dropdown-item" href="/reviewer/{{ conf.name }}/invite_reviewers">Invite Reviewers</a>
+                      <a class="dropdown-item" href="/reviewer/{{ conf.name }}/automated_reviewer_assignment">Automated Reviewer Assignment</a>
+                      <a class="dropdown-item" href="/reviewer/{{ conf.name }}/manual_reviewer_assignment">Manual Reviewer Assignment</a>
+                  {% endif %}
+              </div>
+          </div>                        
+          {% else %}
+              -
+          {% endif %}
+
+      </td>
+      </tr>
+      {% endif %}
+    {% endfor %}
   </tbody>
 </table>
-
-<!--<h1 class="mt-2">My Submitted Workshops list</h1>-->
-<!--<button type="button" class="btn btn-light" style="float: right;"><a href="create_workshop">+ Create Workshop</a></button>-->
-<!--<table class="table">-->
-<!--  <thead class="thead-light">-->
-<!--  <tr>-->
-<!--    <th scope="col">Name</th>-->
-<!--    <th scope="col">Parent Conference</th>-->
-<!--    <th scope="col">Start Date</th>-->
-<!--    <th scope="col">End Date</th>-->
-<!--    <th scope="col">Location</th>-->
-<!--    <th scope="col">External URL</th>-->
-<!--  </tr>-->
-<!--  </thead>-->
-
-<!--  <tbody>-->
-<!--  {% for workshop in workshops %}-->
-<!--  {% if workshop.is_valid %}-->
-<!--  <tr>-->
-<!--    <td><a href="#">{{ workshop.name }}</td>-->
-<!--    <td><a href="#">{{ workshop.parent_conference_name }}</td>-->
-<!--    <td>{{ workshop.start_date }}</td>-->
-<!--    <td>{{ workshop.end_date }}</td>-->
-<!--    <td>{{ workshop.location }}</td>-->
-<!--    <td><a href="#">{{ workshop.url }}</td>-->
-<!--  </tr>-->
-<!--  {% endif %}-->
-<!--  {% endfor %}-->
-<!--  </tbody>-->
-<!--</table>-->
 
 {% endblock %}

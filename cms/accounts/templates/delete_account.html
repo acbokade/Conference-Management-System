@@ -2,14 +2,19 @@
 
 {% block content %}
 
-{{ user_message }}
+{% if user_message %}
+<div class="alert alert-danger" role="alert">
+    {{ user_message }}
+</div>
+{% endif %}
 
-<form action="delete_account" method="post">
-    {% csrf_token %}
-    <h1>This will permanently Delete all your paper submissions, reviews made, Area Chair decisions made and
-    the profile.</h1>
-    <input type="submit" value="Delete Account">
-
-</form>
+<div class="container">
+    <form action="delete_account" method="post">
+        {% csrf_token %}
+        <h1>This will permanently Delete all your paper submissions, reviews made, Area Chair decisions made and
+        the profile.</h1>
+        <input class="btn btn-danger" type="submit" value="Delete Account">    
+    </form>
+</div>
 
 {% endblock %}

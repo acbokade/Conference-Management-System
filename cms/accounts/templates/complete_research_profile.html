@@ -2,24 +2,24 @@
 
 {% block content %}
 
-<div class="divFormContainer">
-        <form action="complete_research_profile_process" method="post">
-            {% csrf_token %}
-            Institution: <input type="text" placeholder="{{ institution }}" name="institution">
-            <br>
+<div class="container">
+    <form action="complete_research_profile_process" method="post">
+        {% csrf_token %}
+        Institution: <input type="text" placeholder="{{ institution }}" name="institution">
+        <br>
 
-            Research Interests (in comma-separated manner, for ex: interest1,interest2,interest3...):
-            <input type="text" placeholder="{{ research_interests }}" name="research_interests">
-            <br>
+        Research Interests (in comma-separated manner, for ex: interest1,interest2,interest3...):
+        <input type="text" placeholder="{{ research_interests }}" name="research_interests">
+        <br>
 
-            Highest Degree Earned: <input type="text" placeholder="{{ highest_degree }}" name="highest_degree">
-            <br>
+        Highest Degree Earned: <input type="text" placeholder="{{ highest_degree }}" name="highest_degree">
+        <br>
 
-            Google Scholar Link: <input type="text" placeholder="{{ google_scholar }}" name="google_scholar">
-            <br>
+        Google Scholar Link: <input type="text" placeholder="{{ google_scholar }}" name="google_scholar">
+        <br>
 
-            <input type="submit" value="Submit Data">
-        </form>
+        <input type="submit" value="Submit Data" class="btn btn-primary">
+    </form>
 </div>
 
 {% endblock %}
