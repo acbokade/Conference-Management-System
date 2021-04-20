@@ -18,6 +18,16 @@ class RemReviewsAndPaperPair(object):
         return self.rem_reviews > other.rem_reviews
 
 
+def check_paper_conflicts(reviewer, paper_submission):
+    reviewer_email = reviewer.user_id
+    if reviewer_email == paper_submission.main_author_id:
+        return False
+    for other_authors in paper_submission.authors:
+        if reviewer_email == other_authors.user_id:
+            return False
+    return True
+
+
 def assign_reviewers(reviewers, paper_submissions):
     # TODO: handle conflicts
     paper_reviewer_mapping = {}
@@ -27,15 +37,27 @@ def assign_reviewers(reviewers, paper_submissions):
     heapify(paper_rem_reviews_heap)
     # assigning each reviewer a set of papers according to his/her paper review limit
     for reviewer in reviewers:
+        iter_no = 0
         # remove next line after testing
-        reviwer_paper_review_limit = reviewer.paper_review_limit
+        reviewer_paper_review_limit = reviewer.paper_review_limit
         max_review_limit = min(
-            reviwer_paper_review_limit, len(paper_rem_reviews_heap))
+            reviewer_paper_review_limit, len(paper_rem_reviews_heap))
         while len(paper_rem_reviews_heap) > 0 and max_review_limit > 0:
             rem_reviews_paper_pair = heappop(
                 paper_rem_reviews_heap)
             paper_rem_reviews, paper_submission = rem_reviews_paper_pair.rem_reviews, rem_reviews_paper_pair.paper
 
+            # to prevent infinite looping
+            if iter_no > len(paper_rem_reviews_heap):
+                break
+
+            # checking conflicts
+            if check_paper_conflicts(reviewer, paper_submission):
+                heappush(paper_rem_reviews_heap,
+                         RemReviewsAndPaperPair(paper_rem_reviews, paper_submission))
+                continue
+
+            iter_no += 1
             # assign the paper to reviewer
             if paper_submission not in paper_reviewer_mapping:
                 paper_reviewer_mapping[paper_submission] = [
@@ -53,14 +75,14 @@ def assign_reviewers(reviewers, paper_submissions):
             if paper_rem_reviews > 0:
                 heappush(paper_rem_reviews_heap,
                          RemReviewsAndPaperPair(paper_rem_reviews, paper_submission))
-            reviwer_paper_review_limit -= 1
+            reviewer_paper_review_limit -= 1
             # reviewer.save()
 
             # max_review_limit = min(
             #     reviwer_paper_review_limit, len(paper_rem_reviews_heap))
             max_review_limit -= 1
             print(paper_rem_reviews_heap, reviewer.user.name,
-                  reviwer_paper_review_limit)
+                  reviewer_paper_review_limit)
     print(paper_reviewer_mapping)
     return paper_reviewer_mapping
 
