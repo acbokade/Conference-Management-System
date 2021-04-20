@@ -63,9 +63,17 @@ def get_paper_submission(email, conf_name, paper_title):
         return None
 
 
-def get_unassigned_papers(conf_name):
+def get_unassigned_papers_of_conf(conf_name):
     all_papers = get_all_paper_submissions_of_conf(conf_name)
     unassigned_papers = []
     for paper in all_papers:
-        if len(paper.assignedreviewers_set.all()) != MIN_PAPER_REVIEW_LIMIT:
-            unassigned_papers
+        if len(paper.assignedreviewers_set.all()) < MIN_PAPER_REVIEW_LIMIT:
+            unassigned_papers.append(paper)
+    return unassigned_papers
+
+
+def get_number_of_papers_of_a_conf_in_an_area(conf_name, conf_subject_area):
+    conf = conference_dao.get_conference_by_name(conf_name)
+    papers_of_an_area = conf.papersubmission_set.all().filter(
+        subject_area=conf_subject_area)
+    return len(papers_of_an_area)

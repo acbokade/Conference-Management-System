@@ -1,53 +1,68 @@
 {% extends 'reviewer_base.html' %}
 
-{% block content %}
-<div class="container">
-<h1 class="mt-2">Invite reviewers</h1>
-  <form method="post">
-    {% csrf_token %}
-    <!-- {{ form.as_p }} -->
-    <div class="container">
-        <div class="row">
-        <div class="col-12">
-            <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">Select User</th>
-                    <th scope="col">Institution</th>
-                    <th scope="col">Research Interest</th>
-                    <th scope="col">Highest degree</th>
-                    <th scope="col">Google scholar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for conf_user in conf_users %}
-                <tr>
-                <td>
-                    <!-- <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                        <label class="custom-control-label" for="customCheck1"></label>
-                    </div> -->
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value={{ conf_user.email }} id="flexCheckDefault" name="checked_users">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            {{ conf_user.name }}
-                        </label>
-                    </div>
-                </td>
-                <!-- check this -->
-                <td>{{ conf_user.research_profile.institution }}</td>
-                <td>{{ conf_user.research_profile.research_interest }}</td>
-                <td>{{ conf_user.research_profile.highest_degree }}</td>
-                <td>{{ conf_user.research_profile.google_scholar }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+{% load template_filters %}
 
-            </table>
+{% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+</ul>
+{% endif %}
+<div class="container">
+    <h1 class="mt-2">Invite reviewers</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for subject_area, uninvited_users in subject_area_uninvited_users_dict.items %}
+        <h3 class="mt-2">{{ subject_area }} (Required invitations -
+            {{ subject_area_required_invitations|lookup:subject_area }} )
+        </h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Select User</th>
+                                <th scope="col">Institution</th>
+                                <th scope="col">Research Interest</th>
+                                <th scope="col">Highest degree</th>
+                                <th scope="col">Google scholar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for uninvited_user in uninvited_users %}
+                            <tr>
+                                <td>
+                                    <!-- <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label" for="customCheck1"></label>
+                                    </div> -->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value={{ uninvited_user.email }}
+                                            id={{ uninvited_user.email }} name="checked_users">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            {{ uninvited_user.name }}
+                                        </label>
+                                    </div>
+                                </td>
+                                {% with uninvited_user.researchprofile_set.all|first as profile %}
+                                <td>{{ profile.institution }}</td>
+                                <td>{{ profile.research_interests }}</td>
+                                <td>{{ profile.highest_degree }}</td>
+                                <td>{{ profile.google_scholar }}</td>
+                                {% endwith %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-success">Invite selected reviewers</button>
-  </form>
+        {% endfor %}
+        <button type="submit" class="btn btn-success">Invite selected reviewers</button>
+    </form>
 </div>
 {% endblock %}

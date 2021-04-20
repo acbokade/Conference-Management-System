@@ -19,3 +19,16 @@ def obtain_user_security_question(email):
 
 def obtain_user_security_answer(email):
     return models.SecurityQuestions.objects.get(user=obtain_user_by_email(email)).answer
+
+
+def get_users_by_research_interest(subject_area):
+    related_users = []
+    all_users = models.User.objects.all()
+    for user in all_users:
+        user_research_profile = user.researchprofile_set.all()
+        if len(user_research_profile):
+            research_interests = (
+                user_research_profile[0].research_interests).split(',')
+            if subject_area in research_interests:
+                related_users.append(user)
+    return related_users

@@ -1,160 +1,132 @@
 [
-    {
-      "model": "accounts.User",
-      "pk": "a",
-      "fields": {
-        "password": "abd37534c7d9a2efb9465de931cd7055ffdb8879563ae98078d6d6d5",
-        "name": "a"
-      }
-    },
-    {
-        "model": "accounts.User",
-        "pk": "b",
-        "fields": {
-          "password": "c681e18b81edaf2b66dd22376734dba5992e362bc3f91ab225854c17",
-          "name": "b"
-        }
-    },
-    {
-        "model": "accounts.User",
-        "pk": "c",
-        "fields": {
-          "password": "1053463d383dc1e87f06fff34b3c6a2d340d91e184d46d70144ffa5a",
-          "name": "c"
-        }
-    },
-    {
-        "model": "accounts.User",
-        "pk": "d",
-        "fields": {
-          "password": "06c9f71496e24dec6acc44895648cf9ec40b5cebb7bc4858a3c69f25",
-          "name": "d"
-        }
-    },
-
-
-
-    {
-        "model": "conference.Conference",
-        "pk": "conf_a",
-        "fields": {
-          "ca_emails": "a",
-          "start_date": "2021-09-01",
-          "paper_submission_deadline": "2021-09-02",
-          "review_submission_deadline": "2021-09-03",
-          "cam_pos_submission_deadline": "2021-09-04",
-          "ac_decision_start_date": "2021-09-05",
-          "ac_decision_submission_deadline": "2021-09-06",
-          "end_date": "2021-09-07",
-          "subject_areas": "CNN,RNN",
-          "is_valid": true,
-          "created_by": "a"
-        }
-    },
-    {
-        "model": "conference.Conference",
-        "pk": "conf_b",
-        "fields": {
-          "ca_emails": "b",
-          "start_date": "2021-09-01",
-          "paper_submission_deadline": "2021-09-02",
-          "review_submission_deadline": "2021-09-03",
-          "cam_pos_submission_deadline": "2021-09-04",
-          "ac_decision_start_date": "2021-09-05",
-          "ac_decision_submission_deadline": "2021-09-06",
-          "end_date": "2021-09-07",
-          "subject_areas": "Segmentation,Classification",
-          "is_valid": true,
-          "created_by": "b"
-        }
-    },
-
-
-
-    {
-        "model": "gsp.PaperSubmission",
-        "pk": "paper_2",
-        "fields": {
-          "conference": "conf_a",
-          "main_author": "b",
-          "subject_area": "RNN"
-        }
-    },
-    {
-        "model": "gsp.PaperSubmission",
-        "pk": "paper_3",
-        "fields": {
-          "conference": "conf_a",
-          "main_author": "c",
-          "subject_area": "RNN"
-        }
-    },
-    {
-        "model": "gsp.PaperSubmission",
-        "pk": "paper_4",
-        "fields": {
-          "conference": "conf_a",
-          "main_author": "d",
-          "subject_area": "RNN"
-        }
-    },
-    {
-        "model": "gsp.PaperSubmission",
-        "pk": "paper_5",
-        "fields": {
-          "conference": "conf_a",
-          "main_author": "a",
-          "subject_area": "CNN"
-        }
-    },
-    {
-      "model": "gsp.PaperSubmission",
-      "pk": "paper_6",
-      "fields": {
-        "conference": "conf_a",
-        "main_author": "b",
-        "subject_area": "CNN"
-      }
-    },
-    {
-      "model": "gsp.PaperSubmission",
-      "pk": "paper_7",
-      "fields": {
-        "conference": "conf_a",
-        "main_author": "c",
-        "subject_area": "CNN"
-      }
-    },
-
-
-
-
-    {
-        "model": "reviewer.Reviewer",
-        "fields": {
-          "user": "a",
-          "conference": "conf_a",
-          "area_expertise": "CNN",
-          "paper_review_limit": "4"
-        }
-    },
-    {
-        "model": "reviewer.Reviewer",
-        "fields": {
-          "user": "b",
-          "conference": "conf_a",
-          "area_expertise": "CNN",
-          "paper_review_limit": "4"
-        }
-    },
-    {
-      "model": "reviewer.Reviewer",
-      "fields": {
-        "user": "c",
-        "conference": "conf_a",
-        "area_expertise": "RNN",
-        "paper_review_limit": "4"
-      }
+  {
+    "model": "accounts.User",
+    "pk": "a",
+    "fields": {
+      "password": "abd37534c7d9a2efb9465de931cd7055ffdb8879563ae98078d6d6d5",
+      "name": "a"
+    }
+  },
+  {
+    "model": "accounts.User",
+    "pk": "b",
+    "fields": {
+      "password": "c681e18b81edaf2b66dd22376734dba5992e362bc3f91ab225854c17",
+      "name": "b"
+    }
+  },
+  {
+    "model": "accounts.User",
+    "pk": "c",
+    "fields": {
+      "password": "1053463d383dc1e87f06fff34b3c6a2d340d91e184d46d70144ffa5a",
+      "name": "c"
+    }
+  },
+  {
+    "model": "accounts.User",
+    "pk": "d",
+    "fields": {
+      "password": "06c9f71496e24dec6acc44895648cf9ec40b5cebb7bc4858a3c69f25",
+      "name": "d"
+    }
+  },
+  {
+    "model": "accounts.ResearchProfile",
+    "fields": {
+      "person": "a",
+      "research_interests": "RNN"
+    }
+  },
+  {
+    "model": "accounts.ResearchProfile",
+    "fields": {
+      "person": "b",
+      "research_interests": "RNN"
+    }
+  },
+  {
+    "model": "accounts.ResearchProfile",
+    "fields": {
+      "person": "c",
+      "research_interests": "CNN"
+    }
+  },
+  {
+    "model": "accounts.ResearchProfile",
+    "fields": {
+      "person": "d",
+      "research_interests": "CNN"
+    }
+  },
+  {
+    "model": "conference.Conference",
+    "pk": "conf_a",
+    "fields": {
+      "ca_emails": "a",
+      "start_date": "2021-09-01",
+      "paper_submission_deadline": "2021-09-02",
+      "review_submission_deadline": "2021-09-03",
+      "cam_pos_submission_deadline": "2021-09-04",
+      "ac_decision_start_date": "2021-09-05",
+      "ac_decision_submission_deadline": "2021-09-06",
+      "end_date": "2021-09-07",
+      "subject_areas": "CNN,RNN",
+      "is_valid": true,
+      "created_by": "a"
+    }
+  },
+  {
+    "model": "conference.Conference",
+    "pk": "conf_b",
+    "fields": {
+      "ca_emails": "b",
+      "start_date": "2021-09-01",
+      "paper_submission_deadline": "2021-09-02",
+      "review_submission_deadline": "2021-09-03",
+      "cam_pos_submission_deadline": "2021-09-04",
+      "ac_decision_start_date": "2021-09-05",
+      "ac_decision_submission_deadline": "2021-09-06",
+      "end_date": "2021-09-07",
+      "subject_areas": "Segmentation,Classification",
+      "is_valid": true,
+      "created_by": "b"
+    }
+  },
+  {
+    "model": "gsp.PaperSubmission",
+    "pk": "paper_2",
+    "fields": {
+      "conference": "conf_a",
+      "main_author": "b",
+      "subject_area": "RNN"
+    }
+  },
+  {
+    "model": "gsp.PaperSubmission",
+    "pk": "paper_3",
+    "fields": {
+      "conference": "conf_a",
+      "main_author": "c",
+      "subject_area": "RNN"
+    }
+  },
+  {
+    "model": "gsp.PaperSubmission",
+    "pk": "paper_5",
+    "fields": {
+      "conference": "conf_a",
+      "main_author": "a",
+      "subject_area": "CNN"
+    }
+  },
+  {
+    "model": "gsp.PaperSubmission",
+    "pk": "paper_6",
+    "fields": {
+      "conference": "conf_a",
+      "main_author": "b",
+      "subject_area": "CNN"
+    }
   }
-
 ]

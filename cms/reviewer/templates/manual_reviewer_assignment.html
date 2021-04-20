@@ -1,10 +1,5 @@
 {% extends 'reviewer_base.html' %}
 
 {% block content %}
-  <h1 class="mt-2">Manual reviewer assignment</h1>
-  <form method="post">
-    {% csrf_token %}
-    
-    <button type="submit" class="btn btn-success">Submit above assigned reviewers</button>
-  </form>
+    <h1 class="mt-2">Manual reviewer assignment</h1>
 {% endblock %}

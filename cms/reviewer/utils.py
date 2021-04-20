@@ -1,5 +1,9 @@
 from heapq import heapify, heappop, heappush
 from .constants import MIN_PAPER_REVIEW_LIMIT
+import pandas as pd
+from reviewer import data_access_layer as reviewer_dao
+from conference import data_access_layer as conference_dao
+from gsp import data_access_layer as gsp_dao
 
 
 class RemReviewsAndPaperPair(object):
@@ -15,6 +19,7 @@ class RemReviewsAndPaperPair(object):
 
 
 def assign_reviewers(reviewers, paper_submissions):
+    # TODO: handle conflicts
     paper_reviewer_mapping = {}
     reviewer_paper_mapping = {}
     paper_rem_reviews_heap = [
@@ -56,6 +61,48 @@ def assign_reviewers(reviewers, paper_submissions):
             max_review_limit -= 1
             print(paper_rem_reviews_heap, reviewer.user.name,
                   reviwer_paper_review_limit)
-    print("***************")
     print(paper_reviewer_mapping)
     return paper_reviewer_mapping
+
+
+# def prepare_paper_assignment_file(all_paper_submissions, conf_name):
+#     all_titles = [
+#         paper_submission.title for paper_submission in all_paper_submissions]
+#     column_names = [f"Reviewer_{i}" for i in range(MIN_PAPER_REVIEW_LIMIT)]
+#     df = pd.DataFrame(index=all_titles, columns=column_names)
+#     df = df.fillna('')
+#     for i in range(len(all_paper_submissions)):
+#         cur_paper = all_paper_submissions[i]
+#         assigned_reviewers_list = list(
+#             cur_paper.assignedreviewers_set.all())
+#         for j in range(len(assigned_reviewers_list)):
+#             df.iloc[i, j] = assigned_reviewers_list[j].reviewer.user_id
+
+#     print(df)
+#     file_name = f"{conf_name}_Paper_assignment.tsv"
+#     paper_assignment_file = df.to_csv(file_name, sep="\t")
+#     return paper_assignment_file
+
+
+# def prepare_reviewer_details_file(all_reviewers, conf_name):
+#     column_names = ["Reviewer_email", "Review_limit"]
+#     data = [[reviewer.user_id, reviewer.paper_review_limit]
+#             for reviewer in all_reviewers]
+#     df = pd.DataFrame(data=data, columns=column_names)
+#     file_name = f"{conf_name}_Reviewer_details.tsv"
+#     reviewer_details_file = df.to_csv(file_name, sep="\t")
+#     return reviewer_details_file
+
+
+def sufficient_reviewers_check_of_conf(conf_name):
+    conf_subject_areas = conference_dao.get_conference_subject_areas(
+        conf_name)
+    for conf_subject_area in conf_subject_areas:
+        n_reviewers = reviewer_dao.get_n_reviewers_of_conf_and_subject_area(
+            conf_name, conf_subject_area)
+        n_paper_submissions = gsp_dao.get_number_of_papers_of_a_conf_in_an_area(
+            conf_name, conf_subject_area)
+        required_invitations = n_paper_submissions//MIN_PAPER_REVIEW_LIMIT
+        if n_reviewers < required_invitations or n_reviewers < MIN_PAPER_REVIEW_LIMIT:
+            return False
+    return True

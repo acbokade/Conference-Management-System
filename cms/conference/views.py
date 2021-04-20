@@ -110,14 +110,14 @@ def update_conference(request, name):
         if (current_time - conf.created_at).days > CONF_UPDATE_DEADLINE:
             messages.error(
                 request, f"Sorry, Not allowed to update conference after {CONF_UPDATE_DEADLINE} days")
-            redirect(list_conferences)
+            return redirect(list_conferences)
         # checking if user is CA of the conference
         cur_user_email = request.COOKIES.get('email')
         conf_ca_emails = conference_dao.get_a_conference_ca_emails(name)
         if cur_user_email not in conf_ca_emails:
             messages.error(
                 request, f"Only Conference admins are allowed to update conference")
-            redirect(list_conferences)
+            return redirect(list_conferences)
         if request.method == "POST":
             form = ConferenceForm(request.POST, instance=conf)
             new_conf_name = request.POST.get('name')

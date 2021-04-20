@@ -41,5 +41,6 @@ class InvitedReviewers(models.Model):
 
 class AssignedReviewers(models.Model):
     reviewer = models.ForeignKey(Reviewer, on_delete=models.CASCADE)
+    conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     paper_submission = models.ForeignKey(
         PaperSubmission, on_delete=models.CASCADE)

@@ -9,7 +9,7 @@ class User(models.Model):
 
 
 class ResearchProfile(models.Model):
-    person = models.ForeignKey(User, on_delete=models.CASCADE, related_name='person')
+    person = models.ForeignKey(User, on_delete=models.CASCADE)
     institution = models.CharField(max_length=250)
     research_interests = models.CharField(max_length=500)
     highest_degree = models.CharField(max_length=250)
@@ -17,6 +17,7 @@ class ResearchProfile(models.Model):
 
 
 class SecurityQuestions(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user')
     question = models.TextField(null=False)
     answer = models.TextField(null=False)
