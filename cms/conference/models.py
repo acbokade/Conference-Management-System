@@ -22,7 +22,6 @@ class ConferenceInfo(models.Model):
     end_date = models.DateTimeField(null=True)
     logo = models.ImageField(null=True, blank=True, upload_to='images')
     url = models.URLField(null=True, blank=True)
-    # TODO: text choices
     subject_areas = models.TextField(max_length=200)
     expected_submissions = models.IntegerField(blank=True, null=True)
     is_valid = models.BooleanField(default=False)  # assigned by portal admin

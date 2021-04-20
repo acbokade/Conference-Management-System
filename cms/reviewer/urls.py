@@ -17,6 +17,6 @@ urlpatterns = [
          views.invite_reviewers, name='invite_reviewers'),
     path('<str:conf_name>/automated_reviewer_assignment/',
          views.automated_reviewer_assignment, name='automated_reviewer_assignment'),
-    path('<str:conf_name>/manual_reviewer_assignment/',
-         views.manual_reviewer_assignment, name='manual_reviewer_assignment'),
+    #     path('<str:conf_name>/manual_reviewer_assignment/',
+    #          views.manual_reviewer_assignment, name='manual_reviewer_assignment'),
 ]
