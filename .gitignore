@@ -8,9 +8,9 @@ db.sqlite3-journal
 media
 .idea/*
 tmp
-accounts/migrations
-conference/migrations
-gsp/migrations
-reviewer/migrations
-area_chair/migrations
+cms/accounts/migrations
+cms/conference/migrations
+cms/gsp/migrations
+cms/reviewer/migrations
+cms/area_chair/migrations
 **/migrations/**
